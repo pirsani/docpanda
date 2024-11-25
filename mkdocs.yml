@@ -1,0 +1,18 @@
+site_name: Panda Docs
+site_description: Documentation for Panda
+site_author: Pirsani Labs
+nav:
+  - Home: index.md
+  - Pendahuluan: pendahuluan.md
+  - Panduan Pengguna: panduan-pengguna.md
+  - Panduan Pengembang: panduan-pengembang.md
+  - Dokumentasi Teknis: dokumentasi-teknis.md
+  - Panduan Pemeliharaan: panduan-pemeliharaan.md
+# theme: readthedocs
+theme:
+  name: material # material
+  favicon: favicon.ico
+plugins:
+  - search
+  # - pdf-export
+  - exporter
