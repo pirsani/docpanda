@@ -8,13 +8,11 @@
   ![sistem-arsitektur](images/3/sistem-arsitektur.png)
   gambar 3.1 Sistem arsitektur
 
-
 ## **3.2 Instalasi Prasyarat**
 
+- Node.js, PNPM, PostgreSQL, Redis, git.
 
-- Node.js, PNPM, PostgreSQL, Redis, PM2, git.
-
-**(panduan berikut merupakan panduan untuk ubuntu)**
+> **(panduan berikut merupakan panduan untuk ubuntu)**
 
 - Perbarui paket-paket yang ada di server:
 
@@ -23,6 +21,7 @@ sudo apt update && sudo apt upgrade -y
 ```
 
 ### **3.2.1 Instalasi Node.js**
+
 - Pastikan Node.js telah terinstal. Jika belum, instal Node.js:
 
 ```sh
@@ -30,20 +29,14 @@ curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
-### **3.2.2 Instalasi pnpm**:
+### **3.2.2 Instalasi pnpm**
 
 ```sh
 corepack enable
 corepack prepare pnpm@latest --activate
 ```
 
-### **3.2.3 Instalasi PM2** secara global:
-  
-```sh
-pnpm add -g pm2
-```
-
-### **3.2.4 Instalasi PostgreSQL**:
+### **3.2.3 Instalasi PostgreSQL**
 
 ```sh
 sudo apt install -y postgresql postgresql-contrib
@@ -63,7 +56,160 @@ postgres=# \q
 $ exit
 ```
 
-### **3.2.5 Instalasi NGINX**:
+### **3.2.4 Instalasi Redis**
+
+```sh
+sudo apt install redis-server
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
+```
+
+check apakah Redis berjalan
+
+```sh
+sudo systemctl status redis-server
+```
+
+Tes Redis
+
+```sh
+redis-cli ping
+```
+
+anda akan melihat response `PONG`
+
+(**OPSIONAL**) jika di windows disarankan menggunakan docker untuk instalasi Redis
+
+berikut contoh `docker-compose.yml`
+
+```yml
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+```
+
+## **3.3 Instalasi Panda**
+
+### **3.3.1 Instalasi**
+
+- Clone repository
+
+```sh
+git clone  git@github.com:pirsani/panda.git
+cd panda
+pnpm install
+```
+
+- Pengaturan `environment variables` di file .env.
+
+```sh
+copy .env.dist .env
+```
+
+ubah isi `.env` sesuai konfigurasi anda
+
+```plaintext
+# .env
+DATABASE_URL_ADMIN="postgresql://postgres:postgres@localhost:5432/panda?schema=public"
+DATABASE_URL_HONORARIUM="postgresql://postgres:postgres@localhost:5432/panda?schema=public"
+
+INIT_ADMIN_PASSWORD="Passadmin#123"
+
+BASE_PATH_UPLOAD="/path/to/your/folder/BASE_PATH_UPLOAD"
+BASE_PATH_UPLOAD_CHUNK="/path/to/your/folder/BASE_PATH_UPLOAD_CHUNK"
+```
+
+### **3.3.2 Struktur Folder**
+
+  Struktur folder secara umum mengikuti [struktur folder Nextjs 14.x](https://nextjs.org/docs/app/getting-started/project-structure).
+
+  Keterangan lebih lanjut dapat melihat dokumentasi [Project Structure and Organization Next.js 14.x](https://nextjs.org/docs/app/getting-started/project-structure).
+
+```tree
+> tree -a -F -L 1
+./
+├── .env*
+├── .env.dist
+├── .env.local*
+├── .eslintrc.json
+├── .git/
+├── .github/
+├── .gitignore
+├── .next/
+├── .vscode/
+├── BASE_PATH_UPLOAD/
+├── README.md
+├── components.json
+├── docs/
+├── fonts/
+├── helper/
+├── next-env.d.ts
+├── next.config.mjs
+├── node_modules/
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── prisma/
+├── public/
+├── src/
+├── tailwind.config.ts
+└── tsconfig.json
+
+13 directories, 15 files
+```
+
+`BASE_PATH_UPLOAD` upload disini menyesuaikan dengan dengan konfigurasi yang ada pada `.env`.
+**sangat disarankan** untuk pengaturan path ini di luar root project
+
+### **3.3.3 Migrasi Database**
+
+> ⚠️ **PERINGATAN:**
+>
+> Pastikan Anda memeriksa konfigurasi sebelum melanjutkan.
+>
+> push hanya dilakukan di environment development, untuk environment production gunakan `deploy`
+>
+> `seed` hanya dilakukan sekali di awal, seed akan mereset data
+  
+- Jalankan migrasi Prisma untuk pertama kali.
+
+```sh
+pnpm run prisma:db-push
+```
+  
+- Initial database.
+
+    Proses ini akan menginisiasi data awal dengan data user superadmin, negara, provinsi dan kota, dan satker
+
+```sh
+pnpm prism db seed
+```
+
+## **3.3 Menjalakan development server**
+
+untuk menjalankan aplikasi
+
+`pnpm dev`
+
+jika semua benar anda dapat mengakses aplikasi di <http://localhost:3000>
+
+## **3.4 Deployment ke server production**
+
+Untuk deploy ke production kita dapat menggunakan `nginx` sebagai proxy server dan `pm2` untuk mengelola proses.
+
+Pastikan anda telah melakukan langkah seperti yang dijelaskan di langkah [Instalasi Prasyarat](#32-instalasi-prasyarat)
+
+### **3.4.1 Instalasi PM2** secara global
+  
+```sh
+pnpm add -g pm2
+```
+
+### **3.4.2 Instalasi NGINX**
 
    ```sh
    sudo apt install -y nginx
@@ -136,7 +282,7 @@ server {
 
 ```
 
-(Opsional) Jika Anda menggunakan domain, pastikan untuk memperbarui konfigurasi DNS Anda dan mengarahkan domain ke IP server Anda. Untuk mengamankan koneksi, Anda dapat menggunakan **Certbot** untuk SSL:
+(**Opsional**) Jika Anda menggunakan domain, pastikan untuk memperbarui konfigurasi DNS Anda dan mengarahkan domain ke IP server Anda. Untuk mengamankan koneksi, Anda dapat menggunakan **Certbot** untuk SSL:
 
 ```sh
 sudo apt install -y certbot python3-certbot-nginx
@@ -144,7 +290,6 @@ sudo certbot --nginx -d yourdomain.com
 ```
 
 jika anda mempunyai ssl certificate sendiri, silakan sesuaikan dengan yang anda miliki.
-
 
 Aktifkan konfigurasi NGINX ini:
 
@@ -154,117 +299,8 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-## **3.3 Instalasi Panda**
+Selamat! anda telah berhasil melakukan deployment aplikasi ke server
 
-### **3.3.1 Instalasi**:
-
-- Clone repository
-
-```sh
-git clone  git@github.com:pirsani/panda.git
-cd panda
-pnpm install
-```
-
-- Pengaturan `environment variables` di file .env.
-
-```sh
-copy .env.dist .env
-```
-
-```plaintext
-# .env
-DATABASE_URL_ADMIN="postgresql://postgres:postgres@localhost:5432/panda?schema=public"
-DATABASE_URL_HONORARIUM="postgresql://postgres:postgres@localhost:5432/panda?schema=public"
-
-INIT_ADMIN_PASSWORD="Passadmin#123"
-
-BASE_PATH_UPLOAD="/path/to/your/folder/BASE_PATH_UPLOAD"
-BASE_PATH_UPLOAD_CHUNK="/path/to/your/folder/BASE_PATH_UPLOAD_CHUNK"
-```
-
-
-### **3.3.2 Struktur Folder**
-
-  Struktur folder secara umum mengikuti [struktur folder Nextjs 14.x](https://nextjs.org/docs/app/getting-started/project-structure). 
-
-  Keterangan lebih lanjut dapat melihat dokumentasi [Project Structure and Organization Next.js 14.x](https://nextjs.org/docs/app/getting-started/project-structure). 
-
-```tree
-> tree -a -F -L 1
-./
-├── .env*
-├── .env.dist
-├── .env.local*
-├── .eslintrc.json
-├── .git/
-├── .github/
-├── .gitignore
-├── .next/
-├── .vscode/
-├── BASE_PATH_UPLOAD/
-├── README.md
-├── components.json
-├── docs/
-├── fonts/
-├── helper/
-├── next-env.d.ts
-├── next.config.mjs
-├── node_modules/
-├── package.json
-├── pnpm-lock.yaml
-├── postcss.config.mjs
-├── prisma/
-├── public/
-├── src/
-├── tailwind.config.ts
-└── tsconfig.json
-
-13 directories, 15 files
-```
-
-`BASE_PATH_UPLOAD` upload disini menyesuaikan dengan dengan konfigurasi yang ada pada `.env`. 
-**sangat disarankan** untuk pengaturan path ini di luar root project
-
-
-### **3.3.3 Migrasi Database**:
-
-> ⚠️ **PERINGATAN:** 
-
-> Pastikan Anda memeriksa konfigurasi sebelum melanjutkan.
->
-> push hanya dilakukan di environment development, untuk environment production gunakan `deploy`
->
-> `seed` hanya dilakukan sekali di awal, seed akan mereset data
-  
-  - Jalankan migrasi Prisma untuk pertama kali.
-
-```sh
-pnpm run prisma:db-push
-```
-  
-  - Initial database.
-
-    Proses ini akan menginisiasi data awal dengan data user superadmin, negara, provinsi dan kota, dan satker
-
-```sh
-pnpm prism db seed
-```
-
-## **3.3 Development Workflow**
-- How to run the development server (`next dev`).
-- Debugging tips for key technologies (e.g., Prisma, Zustand).
-- Guidelines for adding new features or fixing bugs.
-
-## **3.4 Testing**
-- Tools and strategies used for testing:
-  - Unit tests for components (React Testing Library).
-  - Integration testing for API routes.
-- Instructions for running tests.
-
-## **3.5 Deployment**
-- Deployment process for staging and production environments.
-- Managing environment variables securely in production.
-- Monitoring and troubleshooting deployments.
+Baca [Dokumentasi Teknis Database](database.md) untuk mempelajari lebih dalam tentang database
 
 ---

@@ -6,7 +6,8 @@ nav:
   - Pendahuluan: pendahuluan.md
   - Panduan Pengguna: panduan-pengguna.md
   - Panduan Pengembang: panduan-pengembang.md
-  - Dokumentasi Teknis: dokumentasi-teknis.md
+  - Database: database.md
+  - Arsitektur dan Implementasi Nextjs: arsitektur-implementasi.md
   - Panduan Pemeliharaan: panduan-pemeliharaan.md
 # theme: readthedocs
 theme:
@@ -16,3 +17,7 @@ plugins:
   - search
   # - pdf-export
   - exporter
+markdown_extensions:
+  - attr_list
+extra_css:
+  - stylesheets/extra.css
