@@ -77,11 +77,13 @@ Pendekatan ini dirancang untuk menjaga konsistensi, skalabilitas, dan kemudahan 
 
 gambar 5.1 halaman login
 
-#### **5.3.1.2 Membedah login**
+#### **5.3.1.2 komponen login**
 
 ![login](images/5/disect-login.png)
 
 gambar 5.2 halaman login dan file terkait
+
+#### **5.3.1.3 file terkait login**
 
 1. **page** `src\app\page.tsx` atau `src\app\(auth)\login\page.tsx`
 2. **components:**
@@ -90,6 +92,8 @@ gambar 5.2 halaman login dan file terkait
 3. **login handler:**
     - `src\auth.ts`
     - `src\auth.config.ts`
+4. **library**
+    - [Auth.js](https://authjs.dev/getting-started)
   
 pada saat pengguna melakukan login dan berhasil, sistem akan menyimpan data user satker dan roles di session.
 
@@ -145,10 +149,9 @@ penjelasan tentang cara extend session dapad dibaca di [https://authjs.dev/guide
 
 referensi: <https://nextjs.org/docs/app/building-your-application/routing/middleware>
 
-Middleware dijalankan sebelum sebuah request selesai. Pada saat pengguna mengakses aplikasi middleware akan melakukan pengecekan apakah user tersebut mempunyai sesi akses. jika belum maka akan diarahkan ke halaman login.
+Middleware dijalankan sebelum sebuah request selesai. Pada saat pengguna mengakses aplikasi, middleware akan melakukan pengecekan apakah user tersebut mempunyai sesi akses. jika belum maka akan diarahkan ke halaman login.
 
-
-#### **5.3.2.1 file-file terkait middleware**
+#### **5.3.2.1 file terkait middleware**
 
 - `src\middleware.ts` : file utama yang akan dijalankan saat pengguna mengakses aplikasi
 - `src\route.ts` : file ini mendefinisikan route untuk `dashboardRoutes`,`alurProsesRoutes`,`dataReferensiRoutes`
@@ -162,4 +165,206 @@ Agar middleware ini dapat dijalankan dengan ringan, maka middleware hanya melaku
     const isLoggedIn = !!session;
 ```
 
-### **5.3.2 Otorisasi**
+### **5.3.3 Otorisasi dengan accesscontrol dan in memory data Redis**
+
+> **library** <https://onury.io/accesscontrol/>
+>
+> **in Memory Cache** <https://redis.io/docs/latest/operate/oss_and_stack/>
+>
+
+#### **5.3.3.1 file terkait middleware**
+
+- src\actions\pengguna\session.ts
+- src\lib\redis\access-control.ts
+- src\lib\redis\index.ts
+
+Saat pengguna melakukan akses ke halaman tertentu, akan selalu di cek kembali
+
+1. apakah mempunyai login?
+2. apakah mempunyai permission yang diperlukan
+
+Pengecekan untuk setiap halaman secara sederhana dilakukan dari kode berikut:
+
+```ts
+import { getLoggedInPengguna } from "@/actions/pengguna/session";
+# kode lainnya
+  const pengguna = await getLoggedInPengguna();
+  if (!pengguna) {
+    return <div>Anda tidak memiliki akses ke halaman ini</div>;
+  }
+```
+
+sedangkan untuk otorisasi digunakan implementasi pustaka [accesscontrol](https://onury.io/accesscontrol/). `accesscontrol` akan diload ke memory menggunakan [Redis](<https://redis.io/docs/latest/operate/oss_and_stack/>) sehingga sistem tidak perlu melakukan query ke database setiap kali pengecekan permission untuk role.
+
+```ts
+
+# src\app\(route)\(dashboard)\some\page.tsx
+
+import {
+  checkSessionPermission,
+  getLoggedInPengguna,
+} from "@/actions/pengguna/session";
+
+const somePage = async () => {
+  const pengguna = await getLoggedInPengguna();
+
+  if (!pengguna) {
+    redirect("/");
+  }
+
+  const createAny = await checkSessionPermission({
+    actions: ["read:any"],
+    resource: "some-resource",
+  });
+
+  const createOwn = await checkSessionPermission({
+    actions: ["read:own"],
+    resource: "some-resource",
+  });
+
+  if (!createAny && !createOwn) {
+    return "Anda tidak memiliki akses ke halaman ini";
+  }
+
+  # jika login dan punya akses lanjut
+}
+  
+```
+
+kode `checkSessionPermission`
+
+```ts
+# src\actions\pengguna\session.ts
+interface Acl {
+  actions: string | string[];
+  resource: string;
+  attributes?: string[];
+  redirectOnUnauthorized?: boolean;
+}
+export const checkSessionPermission = async ({
+  actions,
+  resource,
+  attributes = [],
+  redirectOnUnauthorized = true,
+}: Acl) => {
+  const pengguna = await getSessionPengguna();
+  console.log("[checkSessionPermission]", actions);
+  if (!pengguna.success || !pengguna.data?.roles) {
+    // redirect to login
+    console.error("Pengguna not found or has no roles");
+    redirect("/login");
+  }
+
+  const roles = pengguna.data.roles;
+  console.log("Roles", roles);
+
+  // string to array
+  let actionsArray: string[] = [];
+  if (typeof actions === "string") {
+    actionsArray = [actions];
+  } else {
+    actionsArray = actions;
+  }
+  let hasPermission = false;
+  // iterate over actions
+  console.log("[actionsArray]", actionsArray);
+  for (const action of actionsArray) {
+    hasPermission = await checkPermission(roles, action, resource);
+    console.log("Has permission", action, resource, hasPermission);
+    if (hasPermission) {
+      return hasPermission;
+    }
+  }
+
+  //const hasPermission = await checkPermission(roles, action, resource);
+  if (!hasPermission && redirectOnUnauthorized) {
+    // redirect to unauthorized
+    console.error("Unauthorized");
+    redirect("/");
+  }
+  return hasPermission;
+};
+```
+
+Pada saat sistem memeriksa `permissions` sistem akan memeriksa apakah sistem sudah menyimpan `accesscontrol` di memori menggunakan `Redis`, jika sudah maka hanya akan membaca dari memory, sedangkan jika belum maka sistem akan melakukan query ke database dan menyimpannya ke memory.
+
+```ts
+
+# src\lib\redis\access-control.ts
+export async function initAcl() {
+  try {
+    
+    const isAclLoaded = await isAccessControlLoaded();
+    if (!isAclLoaded) {
+      console.log("AccessControl is not loaded. Initializing...");
+      await initializeAccessControl();
+    }
+    return true;
+  } catch (error) {
+    console.error("Failed to initialize AccessControl:", error);
+    return false;
+  }
+}
+// Permission checker
+export async function checkPermission(
+  role: string | string[],
+  action: string,
+  resource: string
+): Promise<boolean> {
+  await initAcl();
+  const ac = await loadAccessControl();
+
+  console.log("Checking permission for", role, action, resource);
+
+  if (!ac) {
+    throw new Error("AccessControl is not initialized.");
+  }
+
+  console.log("AccessControl", ac.getGrants());
+
+  try {
+    const permission = ac.permission({
+      role,
+      resource,
+      action,
+    });
+    return permission.granted; // true or false
+  } catch (error: any) {
+    if (error.name === "AccessControlError") {
+      console.error("AccessControlError:", error.message);
+    } else {
+      console.error("Unexpected error:", error.message);
+    }
+  }
+
+  return false;
+}
+
+```
+
+### **5.3.4 Halaman Dashboard**
+
+#### **5.3.4.1 Route**
+
+<https://d01.pirsani.id/dashboard>
+
+#### **5.3.4.1 Tampilan visual**
+
+![dashboard](images/2/2-002-dashboard.png)
+
+gambar 5.3 halaman dashboard
+
+#### **5.3.4.1 komponen dashboard**
+
+![login](images/5/disect-dashboard.png)
+
+gambar 5.4 halaman dashboard dan file terkait
+
+#### **5.3.4.3 file terkait dashboard**
+
+1. **page** `src\app\(route)\(dashboard)\dashboard\page.tsx`
+2. **layout** `src\app\(route)\layout.tsx`
+3. **components:**
+4. **library**
+    - [Recharts](https://recharts.org/en-US/)
+  
