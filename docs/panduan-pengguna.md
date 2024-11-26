@@ -2,9 +2,9 @@
 
   Untuk menjalankan fitur pada aplikasi terdapat 3(tiga) kelompok besar menu yaitu: `Dashboad, Alur Proses, Tabel Referensi`
 
-  - **Akses ke Aplikasi**:
-    - Buka peramban, kemudian ketikkan alamat <https://panda.kemlu.go.id>
-    - Daftar peramban yang didukung adalah sebagai berikut.
+- **Akses ke Aplikasi**:
+  - Buka peramban, kemudian ketikkan alamat <https://panda.kemlu.go.id>
+  - Daftar peramban yang didukung adalah sebagai berikut.
 
       | **Browser**       | **Versi yang didukung**  |
       |-------------------|---------------------------------|
@@ -14,12 +14,12 @@
       | **Safari**         | Versi 13.1 dan lebih baru       |
       | **Opera**          | Versi 67 dan lebih baru         |
 
-  - **Antarmuka**:
-    - Gambaran umum komponen utama.
+- **Antarmuka**:
+  - Gambaran umum komponen utama.
         ![001.antarmuka](images/1/001.antarmuka-labeled.png)
         gambar 2.1. antarmuka
 
-        - keterangan
+    - keterangan
 
         | **Nomor**               | **nama**  | **keterangan** |
         |-------------------------|-----------|----------------|
@@ -31,12 +31,9 @@
         | **6**| Icon Pengguna    | Ikon Pengguna, jika diklik akan menampilkan profil pengguna <br/> dan tombol signout           |
         | **7**| Konten           | akan berisi halaman/tabel/form sesuai menu yang sedang aktif |
 
-
-
-
 ## **2.1 Login**
 
-  - langkah
+- langkah
 
     1. buka peramban dan ketikkan alamat <https://panda.kemlu.go.id>
     2. masukkan email pada kolom username
@@ -47,29 +44,27 @@
   ![2-001-login.png](images/2/2-001-login.png)
   gambar 2.2. login
 
-
-
 ## **2.2 Dashboard**
 
   Halaman Dashboard terdiri atas 3(tiga) bagian:
 
-  - Bagian kartu menampilkan berupa jumlah pengajuan, jumlah pengajuan yang direvisi, pengajuan dalam tahap pembayaran dan pengajuan yang membutuhkan dokumen akhir.
-  - Bagian `Realisasi {tahun}` menampilkan pagu dan realisasi satker anggaran
-  - Bagian `Realisasi SP2D` menampilkan pagu dan realisasi pada unit organisasi yang ada di satker
+- Bagian kartu menampilkan berupa jumlah pengajuan, jumlah pengajuan yang direvisi, pengajuan dalam tahap pembayaran dan pengajuan yang membutuhkan dokumen akhir.
+- Bagian `Realisasi {tahun}` menampilkan pagu dan realisasi satker anggaran
+- Bagian `Realisasi SP2D` menampilkan pagu dan realisasi pada unit organisasi yang ada di satker
 
   ![2-002-dashboard.png](images/2/2-002-dashboard.png)
   gambar 2.3. Dashboard
 
 ## **2.3 Alur Proses**
 
-  Alur proses terbagi dalam 5(lima) tahap yaitu: 
+  Alur proses terbagi dalam 5(lima) tahap yaitu:
 
   0. Setup kegiatan
   1. Pengajuan
   2. Verifikasi
   3. Nominatif
   4. Pembayaran
-  dan 
+  dan
   5. Unggah dokumen akhir yang terdapat di menu `Pending`
 
 ### **2.3.1 Setup Kegiatan**
@@ -78,7 +73,7 @@
 
 #### **2.3.1.1 Kegiatan Dalam Kota**
 
-  - langkah
+- langkah
 
     1. Pilih menu `0. Setup Kegiatan`
     2. akan ditampilkan form dengan isian, isi semua isian yang bertanda bintang `*` dan unggah dokumen
@@ -95,10 +90,9 @@
     ![setup-kegiatan-dalam-kita](images/2/2-003-1-1-b-setup-kegiatan-dalam-kota.png)
     gambar 2.4. Formulir Setup Kegiatan Dalam Kota yang telah diisi
 
-
 #### **2.3.1.2 Kegiatan Luar Kota**
 
-  - langkah
+- langkah
 
     1. Pilih menu `0. Setup Kegiatan`
     2. akan ditampilkan form dengan isian, isi semua isian yang bertanda bintang `*` dan unggah dokumen
@@ -117,7 +111,7 @@
 
   untuk kegiatan luar negeri langkah 1-5 sama dengan kegiatan di dalam negeri. perbedaannya terletak pada langkah selanjutnya yang harus mengisi itinerary
 
-  - langkah
+- langkah
 
     1. Pilih menu `0. Setup Kegiatan`
     2. akan ditampilkan form dengan isian, isi semua isian yang bertanda bintang `*` dan unggah dokumen
@@ -126,7 +120,7 @@
     5. Unggah dokumen `Surat Tugas`, klik tombol `Pilih dokumen Surat Tugas`. Anda dapat memilih 1(satu) atau lebih dokumen.
     6. pilih lokasi `Luar Negeri`
     7. Unggah dokumen `Surat Setneg\SPTJM`. klik tombol browse, pilih dokumen yang akan diunggah
-    8. klik tombol `itinerary` 
+    8. klik tombol `itinerary`
     9. Isi data itinerary, tanggal berangkat dan tanggal tiba, pastikan bahwa itinerary pertama dimulai dari IDN-Indonesia, klik tombol `Simpan`
     10. Isi data itinerary untuk perjalanan berikutnya, klik tombol `Simpan`
     11. Isi data itineray kepulangan dari lokasi terakhir ke IDN-Indonesia, klik tombol `Simpan`, dan klik tombol `Tutup` untuk kembalik ke formulir isian kegiatan
@@ -140,29 +134,46 @@
     ![setup-kegiatan-luar-negeri-c](images/2/2-003-1-3-c-setup-kegiatan-luar-kota.png)
     gambar 2.7. Formulir Setup Kegiatan Luar Negeri dengan Itinerary yang telah diisi
 
-
 ### **2.2.4 Pengajuan**
 
 ### **2.2.5 Verifikasi**
+
 ### **2.2.6 Daftar Nominatif**
+
 ### **2.2.7 Pembayaran**
+
 ### **2.2.8 Pembayaran**
 
 ## **Tabel Referensi**
-### **2.2.9 Narasumber**
-### **2.2.10 Materi**
-### **2.2.11 Kelas**
-### **2.2.12 SBM Honorarium**
-### **2.2.13 SBM UH Dalam Negeri**
-### **2.2.14 SBM UH Luar Negeri**
-### **2.2.15 SBM Transpor**
-### **2.2.16 Pengelola Keuangan**
-### **2.2.17 Satker Anggaran**
-### **2.2.18 Unit Kerja**
-### **2.2.19 Pagu**
-### **2.2.20 SP2D**
-### **2.2.21 Negara**
-### **2.2.22 Provinsi**
-### **2.2.23 Role**
-### **2.2.24 Pengguna**
 
+### **2.2.9 Narasumber**
+
+### **2.2.10 Materi**
+
+### **2.2.11 Kelas**
+
+### **2.2.12 SBM Honorarium**
+
+### **2.2.13 SBM UH Dalam Negeri**
+
+### **2.2.14 SBM UH Luar Negeri**
+
+### **2.2.15 SBM Transpor**
+
+### **2.2.16 Pengelola Keuangan**
+
+### **2.2.17 Satker Anggaran**
+
+### **2.2.18 Unit Kerja**
+
+### **2.2.19 Pagu**
+
+### **2.2.20 SP2D**
+
+### **2.2.21 Negara**
+
+### **2.2.22 Provinsi**
+
+### **2.2.23 Role**
+
+### **2.2.24 Pengguna**

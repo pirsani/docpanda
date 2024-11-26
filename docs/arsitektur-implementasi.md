@@ -98,17 +98,17 @@ gambar 5.2 halaman login dan file terkait
 pada saat pengguna melakukan login dan berhasil, sistem akan menyimpan data user satker dan roles di session.
 
 ```ts
-# src\auth.config.ts
+// src\auth.config.ts
 
 import { getNearestSatkerAnggaran } from "./data/organisasi";
 import { getUser, getUserRoles } from "./data/user";
 
 
-# kode lainnya ...
+// kode lainnya ...
 
 satkerAnggaran = await getNearestSatkerAnggaran(user.organisasiId);
 
-# kode lainnya ...
+// kode lainnya ...
 
 const roles = await getUserRoles(user.id);
 ```
@@ -116,7 +116,7 @@ const roles = await getUserRoles(user.id);
 Session ini diextend dari default session library `Auth.js`.
 
 ```ts
-# src\next-auth.d.ts
+// src\next-auth.d.ts
 
 declare module "next-auth" {
   /**
@@ -159,7 +159,7 @@ Middleware dijalankan sebelum sebuah request selesai. Pada saat pengguna mengaks
 Agar middleware ini dapat dijalankan dengan ringan, maka middleware hanya melakukan pengecekan session(otentikasi). Proses untuk otorisasi akan dijalankan pada masing-masing halaman atau `server action`
 
 ```ts
-# src\middleware.ts
+// src\middleware.ts
     const { nextUrl } = req;
     const session = req.auth;
     const isLoggedIn = !!session;
@@ -187,7 +187,7 @@ Pengecekan untuk setiap halaman secara sederhana dilakukan dari kode berikut:
 
 ```ts
 import { getLoggedInPengguna } from "@/actions/pengguna/session";
-# kode lainnya
+// kode lainnya
   const pengguna = await getLoggedInPengguna();
   if (!pengguna) {
     return <div>Anda tidak memiliki akses ke halaman ini</div>;
@@ -198,7 +198,7 @@ sedangkan untuk otorisasi digunakan implementasi pustaka [accesscontrol](https:/
 
 ```ts
 
-# src\app\(route)\(dashboard)\some\page.tsx
+// src\app\(route)\(dashboard)\some\page.tsx
 
 import {
   checkSessionPermission,
@@ -234,7 +234,7 @@ const somePage = async () => {
 kode `checkSessionPermission`
 
 ```ts
-# src\actions\pengguna\session.ts
+// src\actions\pengguna\session.ts
 interface Acl {
   actions: string | string[];
   resource: string;
@@ -290,7 +290,7 @@ Pada saat sistem memeriksa `permissions` sistem akan memeriksa apakah sistem sud
 
 ```ts
 
-# src\lib\redis\access-control.ts
+// src\lib\redis\access-control.ts
 export async function initAcl() {
   try {
     
@@ -364,7 +364,286 @@ gambar 5.4 halaman dashboard dan file terkait
 
 1. **page** `src\app\(route)\(dashboard)\dashboard\page.tsx`
 2. **layout** `src\app\(route)\layout.tsx`
-3. **components:**
-4. **library**
-    - [Recharts](https://recharts.org/en-US/)
+3. **components layout:**
+
+    - Top Bar `src\components\navigation\top-bar.tsx`
+    - Collapse Button `src\components\navigation\topbar-collapse-button.tsx`
+    - Navbar `src\components\navigation\navbar.tsx`
+    - Sidebar `src\components\navigation\sidebar-container.tsx`
+    - Group of item `src\components\navigation\sidebar-items.tsx`
+    - Item `src\components\navigation\sidebar-item.tsx`
+    - Pilihan Tahun `src\components\select-tahun-anggaran.tsx`
+    - User Button `src\components\user\user-button.tsx`
   
+4. **component content:**
+    - Card Container `src\app\(route)\(dashboard)\dashboard\_components\cards-container.tsx`
+    - Chart Container `src\app\(route)\(dashboard)\dashboard\_components\chart-container.tsx`
+
+5. **library**
+    - [Recharts](https://recharts.org/en-US/)
+
+#### **5.3.4.4 Tabel dan data**
+
+Untuk menampilkan pagu dan realisasi tabel yang digunakan adalah `organisasi`, `sp2d` dan `pagu`
+
+![pagu-sp2d](images/5/pagu-sp2d.png)
+
+Untuk memudahkan pemanggilan query maka di buat fungsi `get_pagu_realisasi`
+
+```sql
+-- DROP FUNCTION public.get_pagu_realisasi(int4, text);
+-- USAGE EXAMPLE
+-- select * from get_pagu_realisasi(2024,'cm2btc0ro0016cazwuqcaunam')
+
+CREATE OR REPLACE FUNCTION public.get_pagu_realisasi(p_year integer, p_satker_id text)
+ RETURNS TABLE(year integer, unit_kerja_id text, nama text, singkatan text, realisasi bigint, pagu bigint, sisa bigint)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    WITH sp2d_totals AS (
+        SELECT
+            sd.unit_kerja_id,
+            EXTRACT(YEAR FROM sd.tanggal_sp2d) AS year,
+            SUM(sd.jumlah_dibayar)::BIGINT AS total_dibayar
+        FROM 
+            sp2d sd
+        GROUP BY 
+            sd.unit_kerja_id, 
+            EXTRACT(YEAR FROM sd.tanggal_sp2d)
+    ),
+    pagu_with_totals AS (
+        SELECT
+            pg.tahun AS year,
+            pg.unit_kerja_id,
+            pg.pagu,
+            COALESCE(st.total_dibayar, 0)::BIGINT AS total_dibayar
+        FROM 
+            pagu pg
+        LEFT JOIN 
+            sp2d_totals st 
+        ON 
+            pg.unit_kerja_id = st.unit_kerja_id
+            AND pg.tahun = st.year
+    )
+    SELECT
+        pwt.year,
+        pwt.unit_kerja_id,
+        org.nama,
+        org.singkatan,
+        pwt.total_dibayar AS realisasi,
+        pwt.pagu,
+        (pwt.pagu - pwt.total_dibayar) AS sisa
+    FROM 
+        pagu_with_totals pwt
+    JOIN 
+        organisasi org
+    ON 
+        pwt.unit_kerja_id = org.id
+    WHERE 
+        pwt.year = p_year
+        AND org.induk_organisasi_id = p_satker_id
+    ORDER BY 
+        pwt.year, 
+        pwt.unit_kerja_id;
+END;
+$function$
+;
+```
+
+fungsi ini akan dipanggil di `src\data\pagu\index.ts`
+
+```ts
+// src\data\pagu\index.ts
+export const getPaguRealisasiUnitKerjaBySatker = async (
+  tahun: number,
+  satkerId: string
+) => {
+  // cast tahun to integer
+  console.log("[getPaguRealisasiUnitKerjaBySatker]", tahun, satkerId);
+  const result = await dbHonorarium.$queryRaw<ResultPaguRealisasi[]>`
+    select * from get_pagu_realisasi(${tahun}::integer,${satkerId})
+  `;
+  return result;
+};
+```
+
+### **5.3.5 Komponen Sidebar**
+
+#### **5.3.5.1 Tampilan visual**
+
+![disect-sidebar](images/5/disect-sidebar.png)
+
+#### **5.3.5.2 file terkait sidebar**
+
+1. komponen `src\components\navigation\sidebar-container.tsx`
+2. sub komponen
+    - `src\components\navigation\sidebar-items.tsx`
+    - `src\components\navigation\sidebar-item.tsx`
+3. lainnya
+    - route `src\route.ts`
+
+#### **5.3.5.3 Tabel dan data**
+
+![user-role-simple](images/4/user_roles-simple.png)
+
+pada komponen `src\components\navigation\sidebar-container.tsx`, sistem akan mengecek role pengguna dari session kemudian akan mengambil `Permissions` dari `Redis`
+
+`Permissions` ini kemudian akan dibandingkan dengan masing-masing `RouteItem` di daftar route `src\route.ts`
+
+```ts
+// src\route.ts
+// "use server";
+export interface RouteItem {
+  name: string;
+  title: string;
+  href: string;
+  icon: string;
+  order?: number;
+  counter?: number;
+  permissions?: string[];
+  displayAsMenu?: boolean;
+  cascadePermissions?: boolean; // cascade permissions to sub routes
+  resources?: string[];
+}
+```
+
+```ts
+
+// src\components\navigation\sidebar-container.tsx
+
+const getRoutesReferensiForRoles = async (): Promise<{
+  filteredRouteDashboard: RouteItem[];
+  filteredRouteReferensi: RouteItem[];
+  filteredRoutesAlurProses: RouteItem[];
+}> => {
+  const permissions: Permissions | null = await getSessionPermissionsForRole();
+// kode lainnya 
+}
+// kode lainnya 
+
+```
+
+Icon pada sidebar didefinisikan di konstanta `iconMap` di `src\components\navigation\sidebar-items.tsx`
+
+```ts
+//src\components\navigation\sidebar-items.tsx
+const iconMap: { [key: string]: LucideIcon } = {
+
+```
+
+### **5.3.6 Komponen Pemilihan Tahun Anggaran**
+
+#### **5.3.6.1 Tampilan visual**
+
+![tahun-anggaran](images/5/disect-tahun-anggaran.png)
+
+#### **5.3.6.2 file terkait Tahun Anggaran**
+
+- komponen `src\components\select-tahun-anggaran.tsx`
+- hook `src\hooks\use-tahun-anggaran-store.ts`
+- pustaka [zustand](https://github.com/pmndrs/zustand)
+- data `src\actions\pengguna\preference.ts`
+
+#### **5.3.6.3 Tabel dan data**
+
+Ketika sistem menampilkan komponen tahun anggaran, sistem akan melihat data di `hook` `useTahunAnggaranStore`, jika belum ada maka akan membuat satu entri baru di tabel `user_preferences`, kemudian menyimpannya di `useTahunAnggaranStore`.
+
+pada saat pengguna memilih tahun anggaran, sistem akan memperbarui data di tabel `user_preferences` dan variabel `tahunAnggaran` di hook `useTahunAnggaranStore`.
+
+`useTahunAnggaranStore` menggunakan `zustand` untuk state manajemen.
+
+```ts
+//src\hooks\use-tahun-anggaran-store.ts
+// Define the Zustand state creator function
+const createState: StateCreator<TahunAnggaranState> = (set) => ({
+  tahunAnggaran: null,
+  initialized: false,
+  setTahunAnggaranYear: async (year) => {
+    set({ tahunAnggaran: year });
+    await setTahunAnggaran(year);
+  },
+  initializeTahunAnggaran: async () => {
+    const tahunAnggaran = await getTahunAnggranPilihan();
+    set({ tahunAnggaran, initialized: true });
+  },
+});
+```
+
+sistem akan menggunakan data tahun anggaran aktif dari hooks `useTahunAnggaranStore` jika komponen merupakan `client component` dan akan menggunakan `getTahunAnggranPilihan` jika komponen merupakan `server component` atau server side script
+
+### **5.3.7 Komponen Pencarian**
+
+#### **5.3.7.1 Tampilan visual**
+
+![disect-pencarian](images/5/disect-pencarian.png)
+
+#### **5.3.7.2 file terkait Pencarian**
+
+- komponen `src\components\navigation\search-input.tsx`
+- hooks `src\hooks\use-search-term.ts`
+
+#### **5.3.7.3 Cara Kerja**
+
+komponen ini merupakan `child component` dari navigation bar `src\components\navigation\navbar.tsx`. ketika pengguna mengetikkan kata kunci pencarian, komponen ini akan menyimpannya sebagai state `searchTerm` yang ada di `useSearchTerm`.
+
+`useSearchTerm` menggunakan `zustand` untuk `state` majemennya
+
+```ts
+// src\components\navigation\search-input.tsx
+import { useSearchTerm } from "@/hooks/use-search-term";
+
+const { setTerm } = useSearchTerm();
+```
+
+`searchTerm` ini kemudian akan digunakan di komponen lain, komponen lain dapat menggunakan `state` `searchTerm` tanpa harus meneruskan `props` dari `parent component` ke `child component`.
+
+contoh penggunaan di `src\app\(route)\data-referensi\pagu\_components\tabel-pagu.tsx`
+
+```ts
+
+//src\app\(route)\data-referensi\pagu\_components\tabel-pagu.tsx
+
+export const TabelPagu = ({
+  data: initialData,
+  optionsPagu,
+  onEdit = () => {},
+}: TabelPaguProps) => {
+  const { searchTerm } = useSearchTerm();
+
+  const filteredData = (data ?? []).filter((row) => {
+    if (!searchTerm || searchTerm === "") return true;
+    const lowercasedSearchTerm = searchTerm.toLowerCase();
+    //const searchWords = lowercasedSearchTerm.split(" ").filter(Boolean);
+    const searchWords =
+      lowercasedSearchTerm
+        .match(/"[^"]+"|\S+/g)
+        ?.map((word) => word.replace(/"/g, "")) || [];
+
+    return searchWords.every(
+      (word) =>
+        row.unitKerja.nama?.toLowerCase().includes(word) ||
+        row.unitKerja.singkatan?.toLowerCase().includes(word) ||
+        row.unitKerja.indukOrganisasi?.nama?.toLowerCase().includes(word)
+    );
+  });
+// kode lainnya
+}
+```
+
+Dengan cara ini, komponen `src\components\navigation\search-input.tsx` sangat mudah dipakai di berbagai halaman. 
+
+> perhatian
+>
+> kekurangan dari cara ini adalah bahwa komponen ini tidak bisa digunakan lebih dari 1(satu) komponen untuk setiap halaman
+
+### **5.3.8 Komponen UserButton**
+
+#### **5.3.8.1 Tampilan visual**
+
+![user-button](images/5/disect-user-button.png)
+
+#### **5.3.8.2 file terkait UserButton**
+
+- komponen `src\components\user\user-button.tsx`
+- sub kompnen `src\components\user\user-button-dropdown.tsx`
