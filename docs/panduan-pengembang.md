@@ -17,19 +17,23 @@
 - Perbarui paket-paket yang ada di server:
 
 ```sh
-sudo apt update && sudo apt upgrade -y
+sudo apt update -y
 ```
 
 ### **3.2.1 Instalasi Node.js**
 
+referensi : <https://nodejs.org/en/learn/getting-started/how-to-install-nodejs>
+
 - Pastikan Node.js telah terinstal. Jika belum, instal Node.js:
 
 ```sh
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install -y nodejs
+sudo apt install nodejs
+node -v
 ```
 
 ### **3.2.2 Instalasi pnpm**
+
+referensi : <https://pnpm.io/installation>
 
 ```sh
 corepack enable
@@ -37,6 +41,8 @@ corepack prepare pnpm@latest --activate
 ```
 
 ### **3.2.3 Instalasi PostgreSQL**
+
+referensi : <https://www.postgresql.org/download/linux/ubuntu/>
 
 ```sh
 sudo apt install -y postgresql postgresql-contrib
@@ -76,7 +82,7 @@ Tes Redis
 redis-cli ping
 ```
 
-anda akan melihat response `PONG`
+response `PONG`
 
 (**OPSIONAL**) jika di windows disarankan menggunakan docker untuk instalasi Redis
 
@@ -169,7 +175,7 @@ BASE_PATH_UPLOAD_CHUNK="/path/to/your/folder/BASE_PATH_UPLOAD_CHUNK"
 
 > ⚠️ **PERINGATAN:**
 >
-> Pastikan Anda memeriksa konfigurasi sebelum melanjutkan.
+> Periksa konfigurasi sebelum melanjutkan.
 >
 > push hanya dilakukan di environment development, untuk environment production gunakan `deploy`
 >
@@ -195,13 +201,13 @@ untuk menjalankan aplikasi
 
 `pnpm dev`
 
-jika semua benar anda dapat mengakses aplikasi di <http://localhost:3000>
+jika semua benar aplikasi dapat mengakses aplikasi di <http://localhost:3000>
 
 ## **3.4 Deployment ke server production**
 
 Untuk deploy ke production kita dapat menggunakan `nginx` sebagai proxy server dan `pm2` untuk mengelola proses.
 
-Pastikan anda telah melakukan langkah seperti yang dijelaskan di langkah [Instalasi Prasyarat](#32-instalasi-prasyarat)
+Pastikan langkah seperti yang dijelaskan di langkah [Instalasi Prasyarat](#32-instalasi-prasyarat) telah dilakukan
 
 ### **3.4.1 Instalasi PM2** secara global
   
@@ -211,15 +217,15 @@ pnpm add -g pm2
 
 ### **3.4.2 Instalasi NGINX**
 
-   ```sh
-   sudo apt install -y nginx
-   ```
+```sh
+sudo apt install -y nginx
+```
 
-  Konfigurasi NGINX untuk meneruskan permintaan ke Next.js Anda. Buat file konfigurasi baru:
+  Konfigurasi NGINX untuk meneruskan permintaan ke Next.js. Buat file konfigurasi baru:
 
-  ```sh
-  sudo nano /etc/nginx/sites-available/panda-app
-  ```
+```sh
+sudo nano /etc/nginx/sites-available/panda-app
+```
 
   Tambahkan konfigurasi berikut ke file tersebut:
 
@@ -282,14 +288,14 @@ server {
 
 ```
 
-(**Opsional**) Jika Anda menggunakan domain, pastikan untuk memperbarui konfigurasi DNS Anda dan mengarahkan domain ke IP server Anda. Untuk mengamankan koneksi, Anda dapat menggunakan **Certbot** untuk SSL:
+(**Opsional**) Pastikan untuk memperbarui konfigurasi DNS dan mengarahkan domain ke IP server. Untuk mengamankan koneksi, dapat menggunakan **Certbot** untuk SSL:
 
 ```sh
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d yourdomain.com
 ```
 
-jika anda mempunyai ssl certificate sendiri, silakan sesuaikan dengan yang anda miliki.
+jika sudah mempunyai ssl certificate sendiri, silakan sesuaikan dengan yang dimiliki.
 
 Aktifkan konfigurasi NGINX ini:
 
@@ -299,7 +305,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-Selamat! anda telah berhasil melakukan deployment aplikasi ke server
+Selamat! aplikasi berhasil dipasang
 
 Baca [Dokumentasi Teknis Database](database.md) untuk mempelajari lebih dalam tentang database
 
