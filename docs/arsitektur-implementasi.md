@@ -647,3 +647,318 @@ Dengan cara ini, komponen `src\components\navigation\search-input.tsx` sangat mu
 
 - komponen `src\components\user\user-button.tsx`
 - sub kompnen `src\components\user\user-button-dropdown.tsx`
+
+### **5.3.9 Halaman Setup Kegiatan**
+
+#### **5.3.9.1 Route**
+
+<https://d01.pirsani.id/setup-kegiatan>
+
+#### **5.3.9.2 Tampilan visual**
+
+![login](images/5/setup-kegiatan.png)
+
+gambar 5.1 halaman Setup Kegiatan
+
+#### **5.3.9.2 komponen setup kegiatan**
+
+![form-setup-kegiatan](images/5/disect-form-setup-kegiatan.png)
+
+gambar 5.2 Formulir setup kegiatan dan file terkait
+
+#### **5.3.9.3 file terkait setup kegiatan**
+
+1. **page** `src\app\(route)\pengajuan\page.tsx`
+2. **components:**
+    - FormKegiatan `src\app\(route)\setup-kegiatan\_components\form-kegiatan.tsx`
+    - BasicDatePicker `src\components\form\date-picker\basic-date-picker.tsx`
+    - FormFileImmediateUpload `src\components\form\form-file-immediate-upload.tsx`
+    - FormMultiFileUpload `src\components\form\form-multifile-upload.tsx`
+    - SelectLokasi `src\components\form\select-lokasi.tsx`
+    - PesertaContainer `src\app\(route)\setup-kegiatan\_components\peserta-container.tsx`
+    - TabelPeserta `src\app\(route)\setup-kegiatan\_components\tabel-peserta.tsx`
+    - SelectLokasi `src\components\form\select-lokasi.tsx`
+    - ItineraryContainer `src\app\(route)\setup-kegiatan\_components\itinerary-container.tsx`
+    - TabelItinerary `src\app\(route)\setup-kegiatan\_components\tabel-itinerary.tsx`
+3. **hook:**
+    - useFileStore `src\hooks\use-file-store.ts`
+4. **schema:**
+    - Kegiatan, kegiatanSchemaEditMode, kegiatanSchemaEditMode `src\zod\schemas\kegiatan.ts`
+5. **utilities**
+    - React Hook Form
+    - Zod
+
+#### **5.3.9.4 tabel dan data**
+
+dalam proses setup kegiatan, tabel-tabel yang digunakan adalah `kegiatan`, `peserta_kegiata`, `uh_luar_negeri`, `uh_dalam_negeri`, `dokumen_kegiatan`, `itinerary` , `dokumen_surat_tugas`, `provinsi`
+
+![kegiatan-tabel](images/5/kegiatan-tabel.png)
+
+#### **5.3.9.5 Cara kerja formulir setup kegiatan**
+
+Ketika pengguna memilih lokasi `dalam kota`, `luar kota`, `luar negeri` formulir akan menyesuaikan. Komponen SelectLokasi `src\components\form\select-lokasi.tsx` secara explisit diload di sisi client
+
+```ts
+// src\app\(route)\setup-kegiatan\_components\form-kegiatan.tsx
+const SelectLokasi = dynamic(() => import("@/components/form/select-lokasi"), {
+  ssr: false,
+  loading: () => <p>Loading lokasi...</p>,
+});
+```
+
+hal ini untuk memastikan tidak ada warning `Extra attributes from the server: aria-activedescendant` pada console;
+
+Jika lokasi yang dipilih adalah **dalam kota** maka `provinsi` di set menjadi `31` untuk **Jakarta** secara default, sedangkan jika luar kota maka komponent `SelectProvinsi` akan tertrigger untuk mengambil dari dari server
+
+```ts
+// src\app\(route)\setup-kegiatan\_components\select-provinsi.tsx
+  useEffect(() => {
+    const fetchOptions = async () => {
+      const optionProvinsi = await getOptionsProvinsiExcludeJakarta();
+```
+
+![form-setup-kegiatan-lokasi-luar-kita](images/5/lokasi-luar-kota.png)
+
+gambar 5.4 Pilihan Luar Kota
+
+Jika lokasi yang dipilih adalah **luar negeri** maka akan ditampilkan komponen `ItineraryContainer`
+
+```ts
+// src\app\(route)\setup-kegiatan\_components\form-kegiatan.tsx
+import ItineraryContainer from "./itinerary-container";
+
+{lokasi == LOKASI.LUAR_NEGERI && (
+    <>
+        <ItineraryContainer onItineraryChange={handleItineraryChange} />
+    </> ) 
+}
+```
+
+![form-setup-kegiatan-lokasi-luar-negeri](images/5/lokasi-luar-negeri.png)
+
+gambar 5.4 Pilihan Luar Negeri
+
+komponen ItineraryContainer berisi `FormItinerary` `src\app\(route)\setup-kegiatan\_components\form-itinerary.tsx` dan `TabelItinerary` `src\app\(route)\setup-kegiatan\_components\tabel-itinerary.tsx`
+
+![form-itinerary](images/5/itinerary-pp.png)
+
+dibagian akhir terdapat komponen `PesertaContainer`, ketika pengguna mengunggah file excel menggunakan komponen `InputFileXlsx`, sistem akan membaca excel, kemudian mengecek apakah ada kolom yang kosong, jika ada maka akan ditampilkan peringatan. kolom yang dibaca dan kolom yang diperbolehkan untuk kosong di set di `src\constants\excel\peserta.ts`
+
+```ts
+// src\constants\excel\peserta.ts
+export const columns = []
+export const emptyAllowed = [
+  "NIP",
+  "Golongan/Ruang",
+  "Eselon",
+  "ID",
+  "Lainny",
+  "Golongan UH LN",
+];
+```
+
+setelah excel selesai diunggah, sistem akan mencoba untuk melakukan upload ke server menggunakan fungsi `exportPesertaXlsx` hanya jika tidak ada kolom yang kurang dan isian didalam kolom yang wajib semua terisi.
+
+```ts
+// src\app\(route)\setup-kegiatan\_components\peserta-container.tsx
+const handleOnChange = async (parseExcelResult: ParseExcelResult) => {
+    if (parseExcelResult.rows.length > 0) {
+      setData(parseExcelResult.rows);
+      setEmptyValues(parseExcelResult.emptyValues);
+      setMissingColumns(parseExcelResult.missingColumns);
+      //console.log(data);
+      const filename = await exportPesertaXlsx(
+        folder,
+        fileCuid,
+        parseExcelResult
+      );
+    } else {
+      console.log("Data is empty");
+      setData([]);
+      setEmptyValues([]);
+      setMissingColumns([]);
+    }
+  };
+
+// kode lainnya 
+  
+export async function exportPesertaXlsx(
+  folderCuid: string,
+  fileCuid: string,
+  parseResult: ParseExcelResult
+) {
+  const result = splitEmptyValues(parseResult.emptyValues, emptyAllowed);
+  const { shouldNotEmpty, allowEmpty } = result;
+  const hasMissingColumns = parseResult.missingColumns.length > 0;
+  const rowsWithEmptyValues = Object.entries(shouldNotEmpty);
+  const hasEmptyValues = rowsWithEmptyValues.length > 0;
+  if (hasMissingColumns || hasEmptyValues) {
+    return null;
+  }
+  // kode lainnya untuk upload ke /api/upload
+}
+```
+
+#### **5.3.9.6 Cara kerja submit setup kegiatan**
+
+Saat pengguna menakan tombol submit sistem akan menjalankan fungsi `setupKegiatan(dataWithoutFile as Kegiatan);`. Data yang dikirim ke server hanya berupa text saja, karena semua file telah dilakukan upload terlebih dahulu ketika pengguna memilih file menggunakan komponen `FormFileImmediateUpload` atau `FormMultiFileUpload`
+
+```ts
+// src\app\(route)\setup-kegiatan\_components\form-kegiatan.tsx
+import setupKegiatan from "@/actions/kegiatan/setup-kegiatan";
+// kode lainnya 
+const onSubmit: SubmitHandler<FormValues<FormMode>> = async (data) => {
+    console.log("[onSubmit]", data);
+    // destructuring data to get the file object
+    const {
+      dokumenNodinMemoSk,
+      dokumenJadwal,
+      dokumenSuratTugas,
+      dokumenSuratSetnegSptjm,
+      pesertaXlsx,
+      ...dataWithoutFile
+    } = data;
+
+    const kegiatanBaru = await setupKegiatan(dataWithoutFile as Kegiatan);
+    if (kegiatanBaru.success) {
+      toast.success("Kegiatan berhasil disimpan");      
+    } else {
+      toast.error(kegiatanBaru.error + " " + kegiatanBaru.message);
+    }
+  };
+```
+
+fungsi `setupKegiatan` merupakan `server action` yang ditandai dengan `"use server";` di baris pertama file `src\actions\kegiatan\setup-kegiatan.ts`
+
+sistem akan melakukan parsing ulang excel yang diupload `parseDataPesertaDariExcel(pesertaXlsx);` untuk memastikan bahwa file yang diunggah valid. jika valid maka sistem akan melakukan transaksi untuk
+
+1. membuat entri baru kegiatan,
+2. menyimpan itinery jika kegiatan luar negeri,
+3. menyimpan data peserta,
+4. dan memindahkan file temporary ke final folder
+
+```ts
+//src\actions\kegiatan\setup-kegiatan.ts
+export const setupKegiatan = async (
+  kegiatan: ZKegiatan
+): Promise<ActionResponse<Kegiatan>> => {
+  // get satkerId and unitKerjaId from the user
+
+  const pengguna = await getSessionPenggunaForAction();
+  if (!pengguna.success) {
+    return pengguna;
+  }
+
+  const satkerId = pengguna.data.satkerId;
+  const unitKerjaId = pengguna.data.unitKerjaId;
+  const penggunaId = pengguna.data.penggunaId;
+
+  const cuid = kegiatan.cuid; // this is the cuid of the kegiatan yang akan digunakan untuk referensi file yang telah diupload
+
+  // step 1: get the data from the excel file
+  let dataPesertaDariExcel: ParseExcelResult;
+  // step 2: parse the xlsx file
+  try {
+    // parse xlsx file yang berisi data peserta yang telah diupload oleh user
+    // cuidFolder dan cuidFile akan digunakan untuk menyimpan file di server
+    // get file from file in folder with cuid
+    const pesertaXlsxCuid = kegiatan.pesertaXlsxCuid;
+
+    // add the file extension
+    const filePesertaXlsx = `${pesertaXlsxCuid}`;
+    const excelFilePath = path.posix.join(
+      BASE_PATH_UPLOAD,
+      "temp",
+      cuid,
+      filePesertaXlsx
+    );
+
+    // check if the file exists
+    logger.info("excelFilePath", filePesertaXlsx);
+
+    const filePesertaXlsxPathResolvedPath = path.resolve(excelFilePath);
+
+    if (!fs.existsSync(filePesertaXlsxPathResolvedPath)) {
+      return {
+        success: false,
+        error: "E-KEG-02",
+        message: "File peserta tidak ditemukan",
+      };
+    }
+
+    // read file as File
+    const pesertaXlsx = fs.readFileSync(filePesertaXlsxPathResolvedPath);
+
+    dataPesertaDariExcel = await parseDataPesertaDariExcel(pesertaXlsx);
+  } catch (error) {
+    console.error("Error parsing xlsx file:", error);
+    return {
+      success: false,
+      error: "Error parsing xlsx file",
+      message: "Data peserta tidak valid",
+    };
+  }
+
+  // step 3: save the data to the database
+  // data ready to be saved
+  try {
+    const kegiatanBaru = await dbHonorarium.$transaction(async (prisma) => {
+      // Create the main kegiatan entry
+      const kegiatanBaru = await createKegiatan(
+        prisma,
+        kegiatan,
+        satkerId,
+        unitKerjaId,
+        penggunaId
+      );
+
+      // if kegiatan.lokasi === "LUAR_NEGERI" then insert itinerary
+      if (kegiatan.lokasi === "LUAR_NEGERI" && kegiatan.itinerary) {
+        const insertedItinerary = await insertItinerary(
+          prisma,
+          kegiatan.itinerary as ZItinerary[],
+          kegiatanBaru.id,
+          penggunaId
+        );
+      }
+
+      // insert peserta dari excel
+      const peserta = await insertPesertaDariExcel(
+        prisma,
+        kegiatan,
+        dataPesertaDariExcel.rows,
+        penggunaId
+      );
+
+      return kegiatanBaru;
+    });
+
+    // move the file to the final folder
+    const logUploadedFile = await saveDokumenKegiatanToFinalFolder(
+      kegiatan,
+      kegiatanBaru.id
+    );
+
+    if (logUploadedFile.length === 0) {
+      return {
+        success: false,
+        error: "E-FSK01", // no file found in temp folder
+        message: "No File Found",
+      };
+    }
+
+    await copyLogUploadedFileToDokumenKegiatan(
+      logUploadedFile,
+      pengguna.data.penggunaId
+    );
+
+    return {
+      success: true,
+      data: kegiatanBaru,
+    };
+  } catch (error) {
+    return ErrorResponseSwitcher(error);    
+  }
+};
+```
+
