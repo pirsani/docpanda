@@ -135,6 +135,43 @@
     gambar 2.7. Formulir Setup Kegiatan Luar Negeri dengan Itinerary yang telah diisi
 
 ### **2.2.4 Pengajuan**
+    ![setup-pengajuan-kegiatan](images/2/2-004-1-1-formulir-setup-pengajuan.png)
+    gambar 2.8. Formulir Setup Pengajuan Kegiatan
+
+
+  #### **2.2.4.1 Pengajuan Kegiatan Dalam Kota**
+
+    ![setup-pengajuan-kegiatan-dalam-kota-a](images/2/2-004-1-2-1-setup-pengajuan-dalam-kota.png)
+    gambar 2.9. Setup Pengajuan Dalam Kota
+
+    ![setup-pengajuan-kegiatan-dalam-kota-b](images/2/2-004-1-2-2-generate-rampungan.png)
+    gambar 2.10. Ajukan Generate Rampungan
+
+    ![setup-pengajuan-kegiatan-dalam-kota-c](images/2/2-004-1-2-3-a-setup-pengajuan-Honorarium.png)
+    gambar 2.11. Ajukan Honorarium
+
+    ![setup-pengajuan-kegiatan-dalam-kota-d](images/2/2-004-1-2-3-b-Jadwal-Kelas-Pengajar.png)
+    gambar 2.12. Pilih Jadwal Kelas Pengajar
+
+    ![setup-pengajuan-kegiatan-dalam-kota-e](images/2/2-004-1-2-3-c-Kelas.png)
+    gambar 2.13. Pilih Kelas
+
+    ![setup-pengajuan-kegiatan-dalam-kota-f](images/2/2-004-1-2-3-d-Materi.png)
+    gambar 2.14. Pilih Materi
+
+    ![setup-pengajuan-kegiatan-dalam-kota-g](images/2/2-004-1-2-3-e-Narasumber.png)
+    gambar 2.15. Pilih Narasumber
+
+    ![setup-pengajuan-kegiatan-dalam-kota-h](images/2/2-004-1-3-1-setup-pengajuan-UH-dalam-negeri.png)
+    gambar 2.16. Setup Pengajuan UH Dalam Negeri
+
+
+#### **2.2.4.2 Pengajuan Kegiatan Luar Kota**
+
+     ![setup-pengajuan-kegiatan-luar-kota-a](images/2/2-004-1-4-1-setup-pengajuan-luar-kota.png)
+    gambar 2.17. Setup Pengajuan Luar Kota
+
+
 
 ### **2.2.5 Verifikasi**
 
