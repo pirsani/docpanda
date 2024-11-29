@@ -1099,7 +1099,7 @@ Komponen ini dirancang untuk memberikan pengalaman unggah file yang responsif, f
 
 ![pengajuan-sesudah-memilih](images/5/pengajuan-sesudah-memilih.png)
 
-![pengajuan-honoraium](images/5/pengajuan-honorium.png)
+![pengajuan-honoraium](images/5/pengajuan-honorium-tambah-jadwal.png)
 
 ![pengajuan-honoraium-jadwal](images/5/pengajuan-honorarium-jadwal.png)
 
@@ -1128,47 +1128,54 @@ Komponen ini dirancang untuk memberikan pengalaman unggah file yang responsif, f
 
 Komponen `PengajuanContainer` adalah komponen React untuk mengelola proses pengajuan pada kegiatan tertentu. Komponen ini menggunakan `useState` dan `useEffect` untuk menangani state dan side effect, serta mengandalkan hooks, komponen dinamis, dan interaksi dengan API untuk mengambil data kegiatan dan log proses. Komponen ini juga memanfaatkan fitur render conditional untuk menampilkan formulir pengajuan sesuai jenis pengajuan yang dipilih.
 
-   1. **State dan Hooks**
-         - `kegiatanId`: State untuk menyimpan ID kegiatan yang dipilih.
-         - `kegiatan`: State untuk menyimpan data detail kegiatan yang dipilih.
-         - `logProses`: State untuk menyimpan log proses pengajuan.
-         - `jenisPengajuan`: State untuk menyimpan jenis pengajuan yang sedang diproses.
-         - `fileUrl` dan `isPreviewHidden`: State dari custom hook `useFileStore` untuk mengelola preview dokumen PDF.
+##### **State dan Hooks**
 
-   2. **Pemilihan dan Perubahan Kegiatan**
-         - Komponen `SelectKegiatan` digunakan untuk memilih kegiatan. Ketika kegiatan berubah, event handler `handleKegiatanChange` dipanggil untuk mengatur ID kegiatan dan mereset `jenisPengajuan`.
-         - Setelah ID kegiatan diatur, efek samping di `useEffect` akan memanggil fungsi asinkron `getKegiatanById` dan `getLogProses` untuk mengambil detail kegiatan dan log prosesnya, lalu menyimpan hasilnya ke dalam state.
+- `kegiatanId`: State untuk menyimpan ID kegiatan yang dipilih.
+- `kegiatan`: State untuk menyimpan data detail kegiatan yang dipilih.
+- `logProses`: State untuk menyimpan log proses pengajuan.
+- `jenisPengajuan`: State untuk menyimpan jenis pengajuan yang sedang diproses.
+- `fileUrl` dan `isPreviewHidden`: State dari custom hook `useFileStore` untuk mengelola preview dokumen PDF.
 
-   3. **Jenis Pengajuan**
-         - Komponen `ButtonsPengajuan` menyediakan tombol untuk memilih jenis pengajuan seperti `HONORARIUM`, `UH_DALAM_NEGERI`, atau `UH_LUAR_NEGERI`. Pilihan jenis pengajuan akan diatur melalui event handler `handleSelection`.
-         - Berdasarkan jenis pengajuan yang dipilih, komponen berikut ditampilkan:
-           - `HonorariumContainer` untuk pengajuan honorarium.
-           - `UhDalamNegeriContainer` untuk pengajuan uang harian dalam negeri.
-           - `UhLuarNegeriContainer` untuk pengajuan uang harian luar negeri.
+##### **Pemilihan dan Perubahan Kegiatan**
 
-   4. **Formulir dan Logika Pengajuan**
-         - Komponen `DisplayFormPengajuanGenerateRampungan` digunakan untuk pengajuan rampungan.
-         - State `kegiatan` diperbarui melalui fungsi `handleSuccessPengajuanRampungan` setelah pengajuan rampungan berhasil.
+- Komponen `SelectKegiatan` digunakan untuk memilih kegiatan. Ketika kegiatan berubah, event handler `handleKegiatanChange` dipanggil untuk mengatur ID kegiatan dan mereset `jenisPengajuan`.
+- Setelah ID kegiatan diatur, efek samping di `useEffect` akan memanggil fungsi asinkron `getKegiatanById` dan `getLogProses` untuk mengambil detail kegiatan dan log prosesnya, lalu menyimpan hasilnya ke dalam state.
 
-   5. **Preview Dokumen PDF**
-         - Komponen `FloatingComponent` digunakan untuk menampilkan preview dokumen PDF.
-         - State `isPreviewHidden` diatur untuk menyembunyikan atau menampilkan preview berdasarkan interaksi pengguna.
+##### **Jenis Pengajuan**
 
-   6. **Penggunaan Komponen Dinamis**
-         - `SelectKegiatan` diimpor secara dinamis menggunakan fungsi `dynamic` dari Next.js untuk menghindari warning rendering di server dan di client yang berbeda
+- Komponen `ButtonsPengajuan` menyediakan tombol untuk memilih jenis pengajuan seperti `HONORARIUM`, `UH_DALAM_NEGERI`, atau `UH_LUAR_NEGERI`. Pilihan jenis pengajuan akan diatur melalui event handler `handleSelection`.
+- Berdasarkan jenis pengajuan yang dipilih, komponen berikut ditampilkan:
+- `HonorariumContainer` untuk pengajuan honorarium.
+- `UhDalamNegeriContainer` untuk pengajuan uang harian dalam negeri.
+- `UhLuarNegeriContainer` untuk pengajuan uang harian luar negeri.
 
-   7. **Rendering Kondisional**
-         - Komponen-komponen pengajuan dirender secara kondisional berdasarkan nilai `jenisPengajuan` dan `kegiatan`.
-         - Jika pengajuan tertentu sudah ada dalam riwayat kegiatan, maka data tersebut akan ditampilkan dengan opsi terbatas (hanya view).
-         - Preview dokumen dapat dilihat di `PdfPreviewContainer`, dengan opsi untuk menyembunyikan preview jika tidak diperlukan.
+##### **Formulir dan Logika Pengajuan**
 
-### **5.3.23 Komponen DisplayFormPengajuanGenerateRampungan**
+- Komponen `DisplayFormPengajuanGenerateRampungan` digunakan untuk pengajuan rampungan.
+- State `kegiatan` diperbarui melalui fungsi `handleSuccessPengajuanRampungan` setelah pengajuan rampungan berhasil.
 
-#### **5.3.23.1 Tampilan visual**
+##### **Preview Dokumen PDF**
+
+- Komponen `FloatingComponent` digunakan untuk menampilkan preview dokumen PDF.
+- State `isPreviewHidden` diatur untuk menyembunyikan atau menampilkan preview berdasarkan interaksi pengguna.
+
+##### **Penggunaan Komponen Dinamis**
+
+- `SelectKegiatan` diimpor secara dinamis menggunakan fungsi `dynamic` dari Next.js untuk menghindari warning rendering di server dan di client yang berbeda
+
+##### **Rendering Kondisional**
+
+- Komponen-komponen pengajuan dirender secara kondisional berdasarkan nilai `jenisPengajuan` dan `kegiatan`.
+- Jika pengajuan tertentu sudah ada dalam riwayat kegiatan, maka data tersebut akan ditampilkan dengan opsi terbatas (hanya view).
+- Preview dokumen dapat dilihat di `PdfPreviewContainer`, dengan opsi untuk menyembunyikan preview jika tidak diperlukan.
+
+### **5.3.13 Komponen DisplayFormPengajuanGenerateRampungan**
+
+#### **5.3.13.1 Tampilan visual**
 
 ![pengajuan-rampungan](images/5/pengajuan-rampungan.png)
 
-#### **5.3.23.2 File terkait**
+#### **5.3.13.2 File terkait**
 
 1. **Komponen**
       - `DisplayFormPengajuanGenerateRampungan` `src\app\(route)\pengajuan\_components\honorarium\display-form-pengajuan-generate-rampungan.tsx`
@@ -1176,98 +1183,668 @@ Komponen `PengajuanContainer` adalah komponen React untuk mengelola proses penga
 2. **server action**
       - `pengajuanGenerateRampungan` `src\actions\kegiatan\proses.ts`
 
-#### **5.3.23.3 Cara kerja DisplayFormPengajuanGenerateRampungan dan FormPengajuanGenerateRampungan**
+#### **5.3.13.3 Cara kerja DisplayFormPengajuanGenerateRampungan**
 
-Komponen `DisplayFormPengajuanGenerateRampungan` menampilkan formulir atau status pengajuan rampungan berdasarkan data kegiatan yang diterima. Komponen ini bekerja bersama dengan `FormPengajuanGenerateRampungan`, yang menangani pengiriman data pengajuan rampungan ke server.
+menampilkan formulir atau status pengajuan rampungan berdasarkan data kegiatan yang diterima. Komponen ini bekerja bersama dengan `FormPengajuanGenerateRampungan`, yang menangani pengiriman data pengajuan rampungan ke server.
 
-1. **Props yang Diterima**
-      - `jenisPengajuan`: Jenis pengajuan yang dipilih.
-      - `kegiatan`: Data detail kegiatan, termasuk riwayat pengajuan.
-      - `handleSuccess`: Callback untuk memperbarui state di komponen induk jika pengajuan berhasil.
+1. **Props**
+
+    - `jenisPengajuan`: Jenis pengajuan yang dipilih.
+    - `kegiatan`: Data detail kegiatan, termasuk riwayat pengajuan.
+    - `handleSuccess`: Callback untuk memperbarui state di komponen induk jika pengajuan berhasil.
 
 2. **Logika Awal**
-      - Jika `kegiatan` tidak tersedia, komponen mengembalikan `null` tanpa merender apa pun.
+
+    - Jika `kegiatan` tidak tersedia, komponen mengembalikan `null` tanpa merender apa pun.
 
 3. **Pemeriksaan Riwayat Pengajuan**
-      - Komponen memeriksa apakah ada pengajuan rampungan (`jenis === "GENERATE_RAMPUNGAN"`) dalam `riwayatPengajuan`.
+
+    - Komponen memeriksa apakah ada pengajuan rampungan (`jenis === "GENERATE_RAMPUNGAN"`) dalam `riwayatPengajuan`.
 
 4. **Rendering Formulir atau Pesan**
-      - Jika `jenisPengajuan` adalah `GENERATE_RAMPUNGAN` dan belum ada pengajuan rampungan, komponen merender `FormPengajuanGenerateRampungan` dengan properti berikut:
-        - `kegiatanId`: ID kegiatan yang sedang diproses.
-        - `handleSuccess`: Callback untuk menangani keberhasilan pengajuan.
-      - Jika pengajuan rampungan sudah ada dengan status `SUBMITTED`, menampilkan:
-        - Pesan status hijau yang menunjukkan pengajuan berhasil.
-        - Informasi status pengajuan dan lokasi kegiatan.
+
+    - Jika `jenisPengajuan` adalah `GENERATE_RAMPUNGAN` dan belum ada pengajuan rampungan, komponen merender `FormPengajuanGenerateRampungan` dengan properti berikut:
+    - `kegiatanId`: ID kegiatan yang sedang diproses.
+    - `handleSuccess`: Callback untuk menangani keberhasilan pengajuan.
+    - Jika pengajuan rampungan sudah ada dengan status `SUBMITTED`, menampilkan:
+    - Pesan status hijau yang menunjukkan pengajuan berhasil.
+    - Informasi status pengajuan dan lokasi kegiatan.
 
 5. **Fallback Default**
-      - Jika tidak ada kondisi yang terpenuhi, komponen tidak merender apa pun.
 
-Komponen `FormPengajuanGenerateRampungan`
+    - Jika tidak ada kondisi yang terpenuhi, komponen tidak merender apa pun.
 
-1. **Props yang Diterima**
-      - `kegiatanId`: ID kegiatan yang diajukan rampungannya.
-      - `className`: (Opsional) Untuk styling tambahan.
-      - `handleSuccess`: Callback untuk pembaruan data setelah pengajuan berhasil.
+### **5.3.14 Komponen `FormPengajuanGenerateRampungan`**
+
+1. **FormPengajuanGenerateRampungan Props**
+
+    - `kegiatanId`: ID kegiatan yang diajukan rampungannya.
+    - `className`: (Opsional) Untuk styling tambahan.
+    - `handleSuccess`: Callback untuk pembaruan data setelah pengajuan berhasil.
 
 2. **Validasi Formulir**
-      - Menggunakan `react-hook-form` dengan validasi berbasis skema `zod`.
-      - Validasi memastikan pengguna mencentang checkbox menyetujui bahwa data yang diinputkan benar sebelum melanjutkan.
+
+    - Menggunakan `react-hook-form` dengan validasi berbasis skema `zod`.
+    - Validasi memastikan pengguna mencentang checkbox menyetujui bahwa data yang diinputkan benar sebelum melanjutkan.
 
 3. **Pengiriman Data**
-      - Saat formulir disubmit:
-          - Memastikan `kegiatanId` tersedia.
-          - Memanggil fungsi `pengajuanGenerateRampungan` untuk mengirim data ke server.
-          - Jika berhasil, memanggil `handleSuccess` untuk memperbarui data di komponen induk.
+
+    Saat formulir disubmit:
+
+    - Memastikan `kegiatanId` tersedia.
+    - Memanggil fungsi `pengajuanGenerateRampungan` untuk mengirim data ke server.
+    - Jika berhasil, memanggil `handleSuccess` untuk memperbarui data di komponen induk.
 
 4. **Rendering Formulir**
-      - Formulir terdiri dari:
+
+    - Formulir terdiri atas:
         - Checkbox untuk konfirmasi data.
         - Tombol "Submit" untuk mengirim pengajuan.
-      - Pesan kesalahan muncul jika validasi gagal.
+    - Pesan kesalahan muncul jika validasi gagal.
 
-#### **5.3.23.4 cara kerja fungsi `pengajuanGenerateRampungan`**
+#### **5.3.13.4 cara kerja fungsi `pengajuanGenerateRampungan`**
 
 Fungsi ini bertanggung jawab untuk mengelola proses pengajuan rampungan untuk kegiatan tertentu. Fungsi ini melakukan beberapa tahap verifikasi dan update pada database, serta mengembalikan data kegiatan setelah proses pengajuan rampungan berhasil dilakukan.
 
-##### **Parameter Input**
+##### **5.3.13.4.1 Parameter Input**
   
 - `kegiatanId` (string): ID dari kegiatan yang terkait dengan pengajuan rampungan.
 
-##### **Langkah-langkah Eksekusi**
+##### **5.3.13.4.2 Langkah-langkah Eksekusi**
 
 1. **Verifikasi Pengguna**
-      - Fungsi memanggil `getSessionPenggunaForAction()` untuk memverifikasi apakah pengguna yang membuat permintaan memiliki sesi yang valid. Jika pengguna tidak ditemukan, fungsi akan mengembalikan respons kesalahan.
-      - Data pengguna (`penggunaId` dan `satkerId`) disimpan untuk keperluan update di database.
+
+    - Fungsi memanggil `getSessionPenggunaForAction()` untuk memverifikasi apakah pengguna yang membuat permintaan memiliki sesi yang valid. Jika pengguna tidak ditemukan, fungsi akan mengembalikan respons kesalahan.
+    - Data pengguna (`penggunaId` dan `satkerId`) disimpan untuk keperluan update di database.
 
 2. **Cek Pengajuan yang Sudah Ada**
-      - Fungsi mencari apakah sudah ada pengajuan dengan `jenis` `GENERATE_RAMPUNGAN` untuk `kegiatanId` yang memiliki status `SUBMITTED` atau `REVISE` menggunakan `dbHonorarium.riwayatPengajuan.findFirst()`.
-      - Jika pengajuan ditemukan, fungsi memperbarui status pengajuan yang ada dengan `dbHonorarium.riwayatPengajuan.update()`, menandai bahwa pengajuan tersebut diajukan oleh pengguna dengan `penggunaId`, dan memperbarui `diajukanTanggal` dan `updatedBy`.
+    - Fungsi mencari apakah sudah ada pengajuan dengan `jenis` `GENERATE_RAMPUNGAN` untuk `kegiatanId` yang memiliki status `SUBMITTED` atau `REVISE` menggunakan `dbHonorarium.riwayatPengajuan.findFirst()`.
+    - Jika pengajuan ditemukan, fungsi memperbarui status pengajuan yang ada dengan `dbHonorarium.riwayatPengajuan.update()`, menandai bahwa pengajuan tersebut diajukan oleh pengguna dengan `penggunaId`, dan memperbarui `diajukanTanggal` dan `updatedBy`.
 
 3. **Buat Pengajuan Baru (Jika Belum Ada)**
-      - Jika tidak ada pengajuan yang ditemukan, fungsi membuat entri baru di `dbHonorarium.riwayatPengajuan` dengan `dbHonorarium.riwayatPengajuan.create()`.
-      - Data yang disimpan termasuk `jenis` pengajuan, `kegiatanId`, `diajukanOlehId`, `diajukanTanggal`, dan `status` diatur sebagai `SUBMITTED`.
+    - Jika tidak ada pengajuan yang ditemukan, fungsi membuat entri baru di `dbHonorarium.riwayatPengajuan` dengan `dbHonorarium.riwayatPengajuan.create()`.
+    - Data yang disimpan termasuk `jenis` pengajuan, `kegiatanId`, `diajukanOlehId`, `diajukanTanggal`, dan `status` diatur sebagai `SUBMITTED`.
 
 4. **Buat Log Proses**
-      - Fungsi membuat log proses baru di `dbHonorarium.logProses` untuk mencatat bahwa pengajuan rampungan telah dibuat. Log ini berisi informasi tentang `kegiatanId`, `jenis` pengajuan, `keterangan`, `status`, serta `createdBy` (dalam hal ini `admin`), dan `tglStatus` diatur ke tanggal saat ini.
+    - Fungsi membuat log proses baru di `dbHonorarium.logProses` untuk mencatat bahwa pengajuan rampungan telah dibuat. Log ini berisi informasi tentang `kegiatanId`, `jenis` pengajuan, `keterangan`, `status`, serta `createdBy` (dalam hal ini `admin`), dan `tglStatus` diatur ke tanggal saat ini.
 
 5. **Ambil Data Kegiatan**
-      - Fungsi memanggil `getKegiatan(kegiatanId)` untuk mengambil data kegiatan yang terkait dengan `kegiatanId`. Data ini termasuk rincian terkait seperti itinerary, provinsi, dokumen kegiatan, dan riwayat pengajuan.
-      - Jika data kegiatan tidak ditemukan, fungsi mengembalikan respons kesalahan dengan kode `E-KUSLN01`.
+    - Fungsi memanggil `getKegiatan(kegiatanId)` untuk mengambil data kegiatan yang terkait dengan `kegiatanId`. Data ini termasuk rincian terkait seperti itinerary, provinsi, dokumen kegiatan, dan riwayat pengajuan.
+    - Jika data kegiatan tidak ditemukan, fungsi mengembalikan respons kesalahan dengan kode `E-KUSLN01`.
 
 6. **Revalidasi Path**
-      - Fungsi memanggil `revalidatePath("/pengajuan")` untuk memastikan bahwa path halaman terkait diperbarui (misalnya, jika fungsi ini dipanggil dalam konteks Next.js).
+    - Fungsi memanggil `revalidatePath("/pengajuan")` untuk memastikan bahwa path halaman terkait diperbarui (misalnya, jika fungsi ini dipanggil dalam konteks Next.js).
 
 7. **Hasil Akhir**
-      - Fungsi mengembalikan objek `ActionResponse` yang menunjukkan keberhasilan atau kegagalan pengajuan. Jika berhasil, data kegiatan yang diperbarui dikembalikan sebagai bagian dari respons.
+    - Fungsi mengembalikan objek `ActionResponse` yang menunjukkan keberhasilan atau kegagalan pengajuan. Jika berhasil, data kegiatan yang diperbarui dikembalikan sebagai bagian dari respons.
 
-#### **5.3.23.5 Hubungan Antara Komponen**
+#### **5.3.13.5 Hubungan Antara Komponen**
 
-##### DisplayFormPengajuanGenerateRampungan
+1. `DisplayFormPengajuanGenerateRampungan`
 
-- Menentukan kapan `FormPengajuanGenerateRampungan` dirender.
-- Mengelola status berdasarkan data `kegiatan` dan `jenisPengajuan`.
+    - Menentukan kapan `FormPengajuanGenerateRampungan` dirender.
+    - Mengelola status berdasarkan data `kegiatan` dan `jenisPengajuan`.
 
-##### FormPengajuanGenerateRampungan
+2. `FormPengajuanGenerateRampungan`
 
-- Mengelola pengiriman data dan validasi input pengguna.
-- Hanya dirender jika kondisi tertentu terpenuhi.
+    - Mengelola pengiriman data dan validasi input pengguna.
+    - Hanya dirender jika kondisi tertentu terpenuhi.
+
+### **5.3.15 Komponen TambahJadwalContainer**
+
+#### **5.3.15.1 Tampilan Visual**
+
+![pengajuan-honorium-tambah-jadwal](images/5/pengajuan-honorium-tambah-jadwal.png)
+
+![disect-pengajuan-honorium-tambah-jadwal](images/5/disect-pengajuan-honorium-tambah-jadwal.png)
+
+
+#### **5.3.15.2 File terkait**
+
+1. Komponen
+
+    - TambahJadwalContainer `src\app\(route)\pengajuan\_components\honorarium\tambah-jadwal-container.tsx`
+    - FormJadwal `src\app\(route)\pengajuan\_components\honorarium\form-jadwal.tsx`
+    - SelectKelas `src\app\(route)\pengajuan\_components\honorarium\select-kelas.tsx`
+    - SelectNarasumber `src\app\(route)\pengajuan\_components\honorarium\select-narasumber.tsx`
+    - DaftarJadwal `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+
+2. Zod Schema
+
+    - Jadwal, jadwalSchema `src\zod\schemas\jadwal.ts`
+
+3. Server Action
+
+    - SimpanJadwalKelasNarasumber `src\actions\honorarium\narasumber\narasumber.ts`
+
+#### **5.3.15.3 Cara kerja komponen TambahJadwalContainer**
+
+Saat tombol jadwal ditekan, akan ditampilkan dialog `TambahJadwalContainer` yang berisi formulir `FormJadwal`. ketika pengguna memilih narasumber sistem akan otomatis menampilkan komponent [`InputFileImmediateUpload`](#5310-komponen-formfileimmediateupload) sejumlah narasumber yang dipilih
+
+```ts
+// src\app\(route)\pengajuan\_components\honorarium\form-jadwal.tsx
+import { Jadwal, jadwalSchema } from "@/zod/schemas/jadwal";
+//kode lainnya
+
+        {narasumberSelected.map((dokumen, index) => (
+          <div className="flex flex-col gap-2" key={dokumen}>
+            <Label className="">
+              Konfirmasi kesediaan {dokumen.split("-")[1]}
+            </Label>
+            <InputFileImmediateUpload
+              cuid={dokumen.split("-")[0]}
+              folder={kegiatanId + "/" + jadwalId}
+              name={dokumen}
+              onFileUploadComplete={handleFileUploadDokumenKonfirmasiCompleted}
+            />
+          </div>
+        ))}
+```
+
+#### **5.3.15.4 Tabel dan data**
+
+Tabel-tabel yang digunakan untuk proses tambah jadwal adalah: `jadwal`, `jadwal_narasumber`, `narasumber`, `materi`, `kelas`, `kegiatan`
+
+![jadwal-narasumber](images/5/tabel-jadwal-narasumber.png)
+
+#### **5.3.15.5 Cara kerja fungsi SimpanJadwalKelasNarasumber**
+
+proses yang dilakukan saat pengguna menekan tombol Simpan diantaranya adalah
+
+1. sistem akan mencoba menyimpan dokumen yang telah diupload menggunakan komponen `InputFileImmediateUpload` ke folder final pada fungsi `saveFileToFinalFolder`
+2. membuat transaksi database, melakukan `upsert` update/insert ke tabel `jadwal`
+3. untuk setiap narasumber yang dipilih akan dientri ke tabel `jadwal_narasumber`
+4. untuk setiap jadwal yang dientri akan mentrigger `DaftarJadwal` untuk memperbarui daftarnya
+
+code snippet `src\app\(route)\pengajuan\_components\honorarium\honorarium-container.tsx`
+
+```ts
+// src\app\(route)\pengajuan\_components\honorarium\honorarium-container.tsx
+  const [jadwalUpdatedAt, setJadwalUpdatedAt] = useState<number>(0);
+  const handleOnSuccess = () => {
+    setJadwalUpdatedAt(jadwalUpdatedAt + 1);
+  };
+
+// kode lainnya
+    <TambahJadwalContainer
+      kegiatanId={kegiatan.id}
+      onSuccess={handleOnSuccess}
+    />
+// kode lainnya
+    <DaftarJadwal
+    triggerUpdate={jadwalUpdatedAt}
+    kegiatanId={kegiatan.id}
+    proses={"PENGAJUAN"}
+  />
+// kode lainnya
+```
+
+code snippet `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+
+```ts
+//src\components\kegiatan\honorarium\daftar-jadwal.tsx
+const DaftarJadwal = ({
+  kegiatanId,
+  proses,
+  triggerUpdate, // hanya simple trigger untuk re-render
+}: DaftarJadwalProps) => {
+    useEffect(() => {
+    const getJadwal = async () => {
+      const dataJadwal = await getObPlainJadwalByKegiatanId(kegiatanId);
+      //const dataJadwal = await getJadwalByKegiatanId(kegiatanId);
+      setDataJadwal(dataJadwal);
+    };
+    getJadwal();
+  }, [kegiatanId, triggerUpdate, selfTrigger]);
+}
+```
+
+### **5.3.16 Komponen DaftarJadwal**
+
+#### **5.3.16.1 Tampilan visual**
+
+![daftar-jadwal](images/5/jadwal-narasumber.png)
+
+![daftar-jadwal-narasumber](images/5/pengajuan-honorarium-info-narsum.png)
+
+#### **5.3.16.2 File terkait**
+
+1. Komponen
+    - DaftarJadwal `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+    - NarasumberListItem `src\components\kegiatan\honorarium\narasumber-list-item.tsx`
+    - NarasumberDetail `src\components\kegiatan\honorarium\narusumber-detail.tsx`
+
+2. Server action
+    - updateJumlahJpJadwalNarasumber `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts`
+
+#### **5.3.16.3 cara kerja**
+
+saat komponen `DaftarJadwal` ditrigger oleh fungsi `handleOnSuccess` di `src\app\(route)\pengajuan\_components\honorarium\honorarium-container.tsx`. `DaftarJadwal` akan menjalankan effect dan mengambil data ke server melalui fungsi `getObPlainJadwalByKegiatanId` dan di set ke state `dataJadwal`
+
+data jadwal bisa di filter menggunakan [pencarian](#537-komponen-pencarian)
+
+```ts
+// src\components\kegiatan\honorarium\daftar-jadwal.tsx
+  const [dataJadwal, setDataJadwal] = useState<ObjPlainJadwalKelasNarasumber[]>(
+    []
+  );
+//kode lainnya
+
+const sortedDataJadwal = dataJadwal.sort((obj1, obj2) => {
+    const date1 = new Date(obj1.tanggal);
+    const date2 = new Date(obj2.tanggal);
+    return date1.getTime() - date2.getTime();
+  });
+  const filteredData = sortedDataJadwal.filter((row) => {
+    if (!searchTerm || searchTerm === "") return true;
+    const lowercasedSearchTerm = searchTerm.toLowerCase();
+    //const searchWords = lowercasedSearchTerm.split(" ").filter(Boolean);
+    const searchWords =
+      lowercasedSearchTerm
+        .match(/"[^"]+"|\S+/g)
+        ?.map((word) => word.replace(/"/g, "")) || [];
+
+    return searchWords.every(
+      (word) =>
+        row.materi.nama?.toLowerCase().includes(word) ||
+        row.jadwalNarasumber.some((narsum) =>
+          narsum.narasumber.nama?.toLowerCase().includes(word)
+        )
+    );
+  });
+```
+
+`filteredData` ini yang kemudian di-looping untuk menampilkan jadwal.
+
+```ts
+// src\components\kegiatan\honorarium\daftar-jadwal.tsx
+  return (
+    <div className="flex flex-col gap-6">
+      {filteredData &&
+        filteredData.map((jadwal: ObjPlainJadwalKelasNarasumber, index) => {}}
+// kode lainnya
+    </div>
+```
+
+untuk setiap jadwal kemudian ditampilkan daftar narasumbernya
+
+```ts
+// src\components\kegiatan\honorarium\daftar-jadwal.tsx
+
+              <div className="flex flex-col w-full px-4 py-2">
+                {jadwal.jadwalNarasumber.map((jadwalNarasumber, index) => {
+                  const jumlahNarsum = jadwal.jadwalNarasumber.length;
+                  return (
+                    <NarasumberListItem
+                      key={jadwalNarasumber.id}
+                      optionsSbmHonorarium={optionsSbmHonorarium}
+                      index={index}
+                      jadwalNarasumber={jadwalNarasumber}
+                      totalNarsum={jumlahNarsum}
+                      proses={proses}
+                      statusPengajuanHonorarium={
+                        jadwal.riwayatPengajuan?.status as STATUS_PENGAJUAN
+                      }
+                    />
+                  );
+                })}
+              </div>
+```
+
+tombol `Update Jenis dan JP` didefinisikan di komponen `NarasumberDetail`
+
+```ts
+// src\components\kegiatan\honorarium\narusumber-detail.tsx
+import { updateJumlahJpJadwalNarasumber } from "@/actions/honorarium/narasumber/proses-pengajuan-pembayaran";
+
+const handleUpdateJp = async () => {
+// kode lainnya 
+if (proses === "PENGAJUAN" || proses === "VERIFIKASI") {
+      // update JP dan update jenis honorarium
+      setIsUpdatingJp(true);
+      const jenisHonorariumId = selectedSbmHonorarium?.value || null;
+      const jumlahJamPelajaran = JumlahJP.toNumber();
+      const updatedJadwalNarasumber = await updateJumlahJpJadwalNarasumber(
+        jadwalNarasumber.id,
+        jumlahJamPelajaran,
+        jenisHonorariumId
+      );
+// kode lainnya 
+}
+// kode lainnya 
+}
+
+// kode lainnya 
+
+      <RowNarasumberWithInput text="Jumlah JP">
+        <input
+          disabled={!isAllowEditJp}
+          value={Number(JumlahJP)}
+          className="px-2 py-1 w-16"
+          min={0.0}
+          type="number"
+          step={0.1}
+          onChange={handleJpChange}
+        />
+        {isAllowEditJp && isChanged && (
+          <Button
+            className="ml-2"
+            variant={"default"}
+            onClick={handleUpdateJp}
+            disabled={isUpdatingJp}
+          >
+            Update Jenis dan JP{" "}
+            {isUpdatingJp ? <LoaderPinwheel className="animate-spin" /> : ""}
+          </Button>
+        )}
+      </RowNarasumberWithInput>
+```
+
+fungsi `updateJumlahJpJadwalNarasumber` pada `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts` akan menghitung besaran pajak dan mengupdate tabel `jadwal_narasumber`
+
+```ts
+// src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts
+  const pangkatGolonganId = jadwalNarasumber.narasumber.pangkatGolonganId;
+  const npwp = jadwalNarasumber.narasumber.NPWP;
+  const tarifPajak = getBesaranPajakHonorarium(pangkatGolonganId, npwp);
+  const pajakDPP = getDpp(jumlahBruto, pangkatGolonganId);
+  const pph21 = pajakDPP.times(tarifPajak.besaranPajak);
+  const jumlahDiterima = jumlahBruto.minus(pph21);
+
+  try {
+    const updateStatus = await dbHonorarium.jadwalNarasumber.update({
+      where: {
+        id: jadwalNarasumberId,
+      },
+      data: {
+        jumlahJamPelajaran: jumlahJp,
+        jenisHonorariumId: jenisHonorariumId,
+        besaranHonorarium: sbmHonorarium.besaran,
+        pajakTarif: tarifPajak.besaranPajak,
+        pajakDPP: pajakDPP,
+        pph21: pph21,
+        jumlahDiterima: jumlahDiterima,
+      },
+    });
+  }
+```
+
+### **5.3.17 Halaman Verifikasi Generate Rampungan**
+
+#### **5.3.17.1 Route**
+
+<https://d01.pirsani.id/verifikasi>
+
+#### **5.3.17.2 Tampilan visual**
+
+![verifikasi-rampungan](images/5/verifikasi-generate-rampungan.png)
+
+#### **5.3.17.3 Tabel dan data**
+
+pada proses verifikasi generate rampungan ini tabel-tabel yang berkaitan adalah `riwayat_pengajuan`, `kegiatan`, `spd`, `peserta_kegiatan`, `uh_dalam_negeri`, `uh_luar_negeri`, `itinerary`
+
+![table-spd-verifikasi-rampungan](images/5/tabel-spd-verifikasi-rampungan.png)
+
+#### **5.3.17.4 File terkait**
+
+1. **page** `src\app\(route)\verifikasi\page.tsx`
+2. **components**
+    - SelectKegiatan
+    - PreviewKegiatan
+    - VerfikasiSelectionContainer `src\app\(route)\verifikasi\_components\verifikasi-selection-container.tsx`
+    - FormGenerateRampungan `src\app\(route)\verifikasi\_components\rampungan\form-generate-rampungan.tsx`
+    - DaftarJadwal `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+    - UangHarianDalamNegeriContainer `src\app\(route)\verifikasi\_components\uang-harian\dalam-negeri-container.tsx`
+    - UangHarianLuarNegeriContainer `src\app\(route)\verifikasi\_components\uang-harian\luar-negeri-container.tsx`
+3. API endpont
+    - /download `src\app\(route)\download\[...slug]\route.ts`
+
+#### **5.3.17.5 Cara kerja**
+
+pada saat pengguna memilih `Verifikasi Generate Rambpungan` dan menekan tombol `Generate SPD` pada `FormGenerateRampungan`, sistem akan melakukan generate spd melaui fungsi `generateSpd`. jika proses ini berhasil sistem akan membuka halaman baru hasil pdf spd `/download/dokumen-rampungan/${kegiatanId}`
+
+```ts
+// src\app\(route)\verifikasi\_components\rampungan\form-generate-rampungan.tsx
+import { generateSpd, updateStatusRampungan } from "@/actions/kegiatan/proses";
+
+const onSubmit = async (data: Spd) => {
+    console.log("[data]", data);
+    //update existing kegiatan
+    const updateStatus = await generateSpd(data);
+    if (updateStatus.success) {
+      handleGenerate();
+      window.open(`/download/dokumen-rampungan/${kegiatanId}`, "_blank"); // Open new window
+    }
+  };
+```
+
+#### **5.3.17.5 Cara kerja API endpoint /download**
+
+API endpoint `/download` merupakan API yang berfungsi untuk menangani proses download dokumen baik yang merupakan hasil generate maupun download dokumen yang sebelumnya diunggah. routing pada endpoint ini menggunakan routing [dinamis](https://nextjs.org/docs/14/app/building-your-application/routing/dynamic-routes#catch-all-segments)
+
+sebagai contoh `/download/dokumen-rampungan/1234567` akan terbaca sebagai `{ slug: ['dokumen-rampungan', '1234567'] }`, api ini kemudian menjalankan fungsi sesuai jenis jenisDokumen `jenisDokumen = slug[0]`
+
+snippet code `src\app\(route)\download\[...slug]\route.ts`
+
+```ts
+// src\app\(route)\download\[...slug]\route.ts
+import { downloadDokumenRampungan } from "./generator-rampungan";
+// kode lainnya
+const jenisDokumen = slug[0];
+console.log(jenisDokumen);
+try {
+  switch (jenisDokumen) {
+    case "dokumen-pengadaan":
+      return downloadDokumenPengadaan(req, slug);
+    case "dokumen-spd":
+      return downloadDokumenSpd(req, slug);
+    case "dokumen-rampungan":
+      return downloadDokumenRampungan(req, slug);
+    case "template-excel":
+      return downloadTemplateExcel(req, slug);
+    case "dokumen-kegiatan":
+      return downloadDokumenKegiatan(req, slug);
+    case "narasumber":
+      return downloadDokumenNarasumber(req, slug);
+    case "test":
+      return downloadTest(req, slug);
+    case "nominatif-honorarium":
+      return downloadNominatifHonorarium(req, slug);
+    case "nominatif-uh-dalam-negeri":
+      return downloadNominatifUhDalamNegeri(req, slug);
+    case "nominatif-uh-luar-negeri":
+      return downloadNominatifUhLuarNegeri(req, slug);
+    case "spd-peserta":
+      return downloadSpdDaftarPeserta(req, slug);
+    case "konfirmasi-kesediaan-mengajar":
+      return downloadDokumenKonfirmasiKesediaanMengajar(req, slug);
+    case "bukti-pembayaran":
+      return downloadDokumenBuktiPembayaran(req, slug);
+    case "bukti-pembayaran-narasumber":
+      return downloadDokumenBuktiPembayaranNarasumber(req, slug);
+    case "dokumen-akhir":
+      return downloadDokumenAkhir(req, slug);
+    default:
+      return new NextResponse(`Download ${params.slug.join("/")}`);
+  }
+} catch (error) {
+console.error(error);
+const customError = error as Error;
+return new NextResponse(`Download error: ${customError.message}`);
+  }
+}
+```
+
+#### **5.3.17.6 Cara kerja fungsi downloadDokumenRampungan**
+
+fungsi `downloadDokumenRampungan` akan melakukan merge 3(tiga) pdf
+
+```ts
+// src\app\(route)\download\[...slug]\generator-rampungan.ts
+export async function downloadDokumenRampungan(req: Request, slug: string[]) {
+
+    const spdHalaman1 = await generateSpdHalaman1(kegiatan);
+    const spdHalaman2 = await generateSpdHalaman2(kegiatan);
+    const spdDaftarPeserta = await generateSpdDaftarPeserta(kegiatan);
+
+    const satuplusdua = await mergePdfs(spdHalaman1, spdHalaman2);
+
+}
+```
+
+fungsi `generatorSpdHalaman1` pada `src\app\(route)\download\[...slug]\generator-spd.ts` pada intinya mengisi form template yang sudah ada. Lokasi template dihardcode di `src/templates/pdf/spd-1.pdf`
+
+```ts
+// src\app\(route)\download\[...slug]\generator-spd.ts
+const fillFormSpd = async (spdData: SpdTextfield) => {
+  const pdfTemplateLocation = "src/templates/pdf/spd-1.pdf";
+}
+```
+
+sedangkan fungsi `generateSpdHalaman2` menggunakan template `src/templates/pdf/rampungan.pdf`. pada fungsi `generateSpdHalaman2` untuk setiap peserta akan digenerate 1 halaman pdf rampungan yang merupakan copy pdf yang telah diisi.
+
+```ts
+// src\app\(route)\download\[...slug]\generator-rampungan.ts
+export const generateSpdHalaman2 = async (kegiatan: KegiatanIncludeSpd) => {
+// kode lainnya 
+  const pdfTemplateLocation = "src/templates/pdf/rampungan.pdf";
+  const templatePath = path.resolve(process.cwd(), pdfTemplateLocation);
+  await fs.access(templatePath, fs.constants.R_OK);
+
+  const pdfBytes = await fillFormRampungan(templatePath, dataRampunganArray);
+// kode lainnya 
+}
+```
+
+#### **5.3.17.7 Verifikasi Generate Rampungan Selesai**
+
+Setelah dilakukan proses `Generate SPD` makan proses dapat diselesaikan dengan menekan tombol `selesai`.
+
+```ts
+// src\app\(route)\verifikasi\_components\rampungan\form-generate-rampungan.tsx
+import { generateSpd, updateStatusRampungan } from "@/actions/kegiatan/proses";
+// kode lainnya
+  const handleClickSelesai = async () => {
+    const updateStatus = await updateStatusRampungan(kegiatanId, "END");
+    if (updateStatus.success) {
+      handleSelesai(updateStatus.data);
+      console.log("[updateStatus]", updateStatus);
+    }
+  };
+// kode lainnya  
+              <Button
+                type="button"
+                variant={"destructive"}
+                onClick={handleClickSelesai}
+              >
+                Selesai
+              </Button>
+```
+
+fungsi `updateStatusRampungan` melakukan `upsertRiwayatPengajuan` dengan status baru `statusRampunganBaru: STATUS_PENGAJUAN`
+
+### **5.3.18 Halaman Pengajuan UH Dalam Negeri**
+
+#### **5.3.18.1 Route**
+
+<https://d01.pirsani.id/pengajuan>
+
+#### **5.3.18.2 komponen**
+
+![pengajuan-uh-dalam-negeri](images/5/pengajuan-uh-dalam-negeri.png)
+
+#### **5.3.18.3 File terkait**
+
+1. **page** src\app\(route)\pengajuan\page.tsx
+2. **components**
+    - uhDalamNegeriContainer `src\app\(route)\pengajuan\_components\uh-dalam-negeri-container.tsx`
+    - FormFileImmediateUpload
+3. **server action**
+    - ajukanUhDalamNegeri `src\actions\kegiatan\uang-harian\dalam-negeri.ts`
+    - upsertRiwayatPengajuan `src\actions\kegiatan\proses.ts`
+  
+#### **5.3.18.4 Tabel dan data**
+
+
+
+#### **5.3.18.5 Cara kerja**
+
+Pengguna mengunggah dokumen data dukung menggunakan komponen [FormFileImmediateUpload](#5310-komponen-formfileimmediateupload)
+
+untuk mengenali setiap dokumen yang diunggah digunakan `createId()`, id ini kemudian digunakan sebagai props `cuid` pada komponen `FormFileImmediateUpload`
+
+```ts
+// src\app\(route)\pengajuan\_components\uh-dalam-negeri-container.tsx
+const form = useForm<FormValues<FormMode>>({
+    resolver: zodResolver(
+      isEditMode
+        ? dokumenUhDalamNegeriSchemaEditMode
+        : dokumenUhDalamNegeriSchema
+    ),
+    defaultValues: {
+      kegiatanId,
+      laporanKegiatanCuid: "laporanKegiatan" + createId() + ".pdf",
+      daftarHadirCuid: "daftarHadir" + createId() + ".pdf",
+      dokumentasiKegiatanCuid: "dokumentasi" + createId() + ".pdf",
+      rampunganTerstempelCuid: "rampungan" + createId() + ".pdf",
+    },
+  });
+
+   <FormFileImmediateUpload
+    cuid={laporanKegiatanCuid}
+    name={field.name}
+    folder={kegiatanId}
+    onFileChange={handleFileChange}
+    className="bg-white w-full border-2"
+  />
+```
+
+proses pengajuan dilakukan ketika pengguna menekan tombol `Ajukan`, sistem akan menjalankan fungsi `ajukanUhDalamNegeri`
+
+```ts
+// src\app\(route)\pengajuan\_components\uh-dalam-negeri-container.tsx
+import ajukanUhDalamNegeri from "@/actions/kegiatan/uang-harian/dalam-negeri";
+
+    const ajukan = await ajukanUhDalamNegeri(dataparsedWithoutFile);
+```
+
+fungsi `ajukanUhDalamNegeri` pada `src\actions\kegiatan\uang-harian\dalam-negeri.ts` akan memindahkan dokumen dari folder temporary ke folder akhir kemudian akan melakukan `upsert` di tabel `riwayat_pengajuan` dengan menjalankan fungsi `upsertRiwayatPengajuan` yang ada di `src\actions\kegiatan\proses.ts`
+
+```ts
+// src\actions\kegiatan\uang-harian\dalam-negeri.ts
+export const ajukanUhDalamNegeri = async (
+  dokumenUhDalamNegeri: DokumenUhDalamNegeri
+): Promise<ActionResponse<Kegiatan | null>> => {
+  try {
+    // step 1. try to move file to final folder
+    logUploadedFile = await saveFileToFinalFolder(dokumenUhDalamNegeri);
+    // kode lainnya
+    // step 3. update kegiatan status Uh Luar Negeri
+    const kegiatanUpdated = await updateStatusUhDalamNegeri(
+      dokumenUhDalamNegeri.kegiatanId,
+      "SUBMITTED"
+    );
+    return kegiatanUpdated;
+  } catch (error) {
+    return ErrorResponseSwitcher(error);
+  }
+}
+```
+
+```ts
+// src\actions\kegiatan\proses.ts
+export const updateStatusUhDalamNegeri = async (
+  kegiatanId: string,
+  statusUhDalamNegeriBaru: STATUS_PENGAJUAN,
+  catatan?: string | null
+): Promise<ActionResponse<Kegiatan>> => {
+  const updated = await upsertRiwayatPengajuan(
+    kegiatanId,
+    statusUhDalamNegeriBaru,
+    "UH_DALAM_NEGERI",
+    catatan
+  );
+
+  return updated;
+};
+```
