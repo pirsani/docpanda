@@ -28,7 +28,7 @@
         | **3**| Input Pencarian  |                                                         |
         | **4**| Satker Aktif     | Menunjukkan satker anggaran                             |
         | **5**| Tahun Anggaran   | Pilihan tahun anggaran yang dipilih dan aktif           |
-        | **6**| Icon Pengguna    | Ikon Pengguna, jika diklik akan menampilkan profil pengguna <br/> dan tombol signout           |
+        | **6**| Icon Pengguna    | Ikon Pengguna, jika diklik akan menampilkan profil pengguna dan tombol signout           |
         | **7**| Konten           | akan berisi halaman/tabel/form sesuai menu yang sedang aktif |
 
 ## **2.1 Login**
@@ -136,51 +136,156 @@
 
 ### **2.2.4 Pengajuan**
 
-  ![setup-pengajuan-kegiatan](images/2/2-004-1-1-formulir-setup-pengajuan.png)
+Formulir Pengajuan Kegiatan ini terdiri dari daftar kegiatan yang telah di setup sebelumnya.
 
+- Langkah:
+  
+  Pilih kegiatan yang akan di ajukan
+  
+  ![setup-pengajuan-kegiatan](images/2/2-004-1-1-formulir-setup-pengajuan.png)
   gambar 2.8. Formulir Setup Pengajuan Kegiatan
 
-#### **2.2.4.1 Pengajuan Kegiatan Dalam Kota**
+#### **2.2.4.1 Pengajuan Kegiatan di Dalam Kota**
+
+  Pada form ini terdapat list kegiatan yang telah di daftarkan sebelumnya pada formulir setup kegiatan, maka akan ditampilkan:
+
+  1. Nama kegiatan
+  2. Tanggal mulai, tanggal selesai
+  3. Dokumen Nodin/Memo/SK
+  4. Dokumen Jadwal Kegiatan
+  5. Dokumen Surat Tugas (multiple files)
+  6. Lokasi
+  7. Status Rampungan
+  8. Klik lambang `view` untuk melihat isi dokumen
 
   ![setup-pengajuan-kegiatan-dalam-kota-a](images/2/2-004-1-2-1-setup-pengajuan-dalam-kota.png)
+  gambar 2.9. Setup Pengajuan Dalam Kota <BR>
 
-  gambar 2.9. Setup Pengajuan Dalam Kota
+- Langkah 1:
+  Klik tombol `Ajukan Generate Rampungan`, maka akan ditampilkan form baru dibawahnya, klik `checklist` keterangan "Dengan ini saya menyatakan telah memeriksa data yang saya inputkan dan menyatakan bahwa data tersebut benar", kemudian `Submit`. Akan muncul "keterangan Pengajuan Generate Rampungan berhasil diajukan, petugas akan memverifikasi pengajuan Anda".
 
   ![setup-pengajuan-kegiatan-dalam-kota-b](images/2/2-004-1-2-2-generate-rampungan.png)
-
   gambar 2.10. Ajukan Generate Rampungan
+  
+<BR>
+
+- Langkah 2:
+  Klik tombol `Ajukan Honorarium`, maka akan ditampilkan formulir pengajuan honorarium.
 
   ![setup-pengajuan-kegiatan-dalam-kota-c](images/2/2-004-1-2-3-a-pengajuan-Honorarium.png)
-
   gambar 2.11. Ajukan Honorarium
+  <br>
+
+- Langkah 3:
+  Apabila belum ada jadwal bisa menambahkan jadwal:
+  klik tombol `Jadwal`, maka akan ditampilkan formulir jadwal kelas pengajar, isikan:
+        1. Tanggal
+        2. Kelas
+        3. Jumlah JP
+        4. Materi
+        5. Narasumber
+        6. Daftar Hadir
+        7. Surat/Nodin/Memo Undangan Narsum
+        8. Klik `Simpan`
 
   ![setup-pengajuan-kegiatan-dalam-kota-d](images/2/2-004-1-2-3-b-Jadwal-Kelas-Pengajar.png)
+  gambar 2.12. Jadwal Kelas Pengajar
 
-  gambar 2.12. Pilih Jadwal Kelas Pengajar
+<BR>
+  
+- Langkah 4:
+  Apabila belum ada kelas bisa menambahkan kelas:
+  klik tombol `Kelas`, maka akan ditampilkan formulir kelas pengajar, isikan:
+      1. Kode
+      2. Nama kelas
+      3. Pilih Nama Kegiatan
+      4. Klik `Tambah`
 
   ![setup-pengajuan-kegiatan-dalam-kota-e](images/2/2-004-1-2-3-c-Kelas.png)
+  gambar 2.13. Kelas
 
-  gambar 2.13. Pilih Kelas
+<BR>
+
+- Langkah 5:
+  Apabila belum ada materi bisa menambahkan materi:
+  klik tombol `Materi`, maka akan ditampilkan formulir materi, isikan:
+      1. Kode
+      2. Nama materi
+      3. Klik `Tambah`
 
   ![setup-pengajuan-kegiatan-dalam-kota-f](images/2/2-004-1-2-3-d-Materi.png)
+  gambar 2.14. Materi
 
-  gambar 2.14. Pilih Materi
+<br>
+
+- Langkah 6:
+  Apabila belum ada narasumber bisa menambahkan narasumber:
+  klik tombol `Narasumber`, maka akan ditampilkan formulir narasumber, isikan:
+      1. Nama
+      2. NIK, NIP, NPWP
+      3. Jabatan, Gol/Ruang, Eselon
+      4. Bank, Nama Rekening, Nomor Rekening
+      5. Email, No. Telepon,
+      6. Pernyataan beda rekening (apabila berbeda)
+      7. Klik `Tambah`
 
   ![setup-pengajuan-kegiatan-dalam-kota-g](images/2/2-004-1-2-3-e-Narasumber.png)
+  gambar 2.15. Narasumber
+<br>
 
-  gambar 2.15. Pilih Narasumber
+- Langkah 7:
+    Pilih Nama Pengajar Kelas, isikan:
+      1. Pilih `Jenis honorarium`
+      2. Masukan `Jumlah JP` dan klik `update Jenis dan JP`
+      3. Kemudian klik tombol `Ajukan`
+<br>      
+
+  ![setup-pengajuan-kegiatan-dalam-kota-g](images/2/2-004-1-3-2-pengajuan-honor.png)
+  gambar 2.16. Ajukan Honorarium
+<br>
+
+- Langkah 8:
+  Formulir ini dapat dilakukan setelah dilakukan `verifikasi Generate Rampungan`.
+  Klik tombol `Ajukan UH Dalam Negeri`, maka akan tampil form baru dan terdapat beberapa isian yang harus di isi:
+      1. laporan Kegiatan
+      2. Daftar Hadir
+      3. Dokumentasi
+      4. Rampungan yang di Stempel
+      5. Klik tombol `Ajukan`
 
   ![setup-pengajuan-kegiatan-dalam-kota-h](images/2/2-004-1-3-1-pengajuan-UH-dalam-negeri.png)
+  gambar 2.17. Setup Pengajuan UH Dalam Negeri
+<BR>
 
-  gambar 2.16. Setup Pengajuan UH Dalam Negeri
+#### **2.2.4.2 Pengajuan Kegiatan  di Luar Kota dan Luar Negeri**
 
-#### **2.2.4.2 Pengajuan Kegiatan Luar Kota**
+Langkah-langkah atau tahap pengisian formulir pada kegiatan di luar kota dan Luar Negeri sama seperti kegiatan dalam kota, yaitu:
+    1. Pilih `Nama Kegiatan`
+    2. `Generate Rampungan`
+    3. `Ajukan Honorarium`
 
   ![setup-pengajuan-kegiatan-luar-kota-a](images/2/2-004-1-4-1-setup-pengajuan-luar-kota.png)
-  
-  gambar 2.17. Setup Pengajuan Luar Kota
+  gambar 2.18. Setup Pengajuan Kegiatan
 
 ### **2.2.5 Verifikasi**
+
+Pada tahap ini terdapat 2 kegiatan yaitu `Verifikasi Generate Rampungan` dan `Verifikasi Honorarium`.
+
+#### **2.2.5.1 Verifikasi Generate Rampungan**
+- Langkah:
+      1. Pilih `Kegiatan`, makan akan ditampilkan data-data: Nama Kegiatan, Tanggal Mulai, Tanggal Selesai, Dokumen Nodin/Memo/SK, Dokumen Jadwal Kegiatan, Dokumen Surat Tugas (multiple files), Lokasi, Status Rampungan
+      2. Klik tombol `Verifikasi Generate Rampungan`
+      3. Akan tampil form dibawahnya, kemudian pilih `PPK`, Masukan keterangan `Pembebanan anggaran - Akun`, Keterangan `SPD`
+      4. Klik tombol `Generate SPD`, akan ditampilkan file PDF `SPD` untuk di download
+
+  ![verifikasi-kegiatan-a](images/2/2-004-1-4-3-verif-rampungan.png)
+  gambar 2.18. Verifikasi Generate Rampungan
+
+  ![verifikasi-kegiatan-b](images/2/2-004-1-4-4-spd.png) gambar 2.19. Contoh file PDF SPD
+
+#### **2.2.5.2 Verifikasi Honorarium**
+- Langkah:
+      1. Pilih `Kegiatan`, makan akan ditampilkan data-data: Nama Kegiatan, Tanggal Mulai, Tanggal Selesai, Dokumen Nodin/Memo/SK, Dokumen Jadwal Kegiatan, Dokumen Surat Tugas (multiple files), Lokasi, Status Rampungan
 
 ### **2.2.6 Daftar Nominatif**
 
