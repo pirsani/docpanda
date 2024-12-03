@@ -77,8 +77,6 @@ Pendekatan ini dirancang untuk menjaga konsistensi, skalabilitas, dan kemudahan 
 
 gambar 5.1 halaman login
 
-#### **5.3.1.2 komponen login**
-
 ![login](images/5/disect-login.png)
 
 gambar 5.2 halaman login dan file terkait
@@ -348,13 +346,11 @@ export async function checkPermission(
 
 <https://d01.pirsani.id/dashboard>
 
-#### **5.3.4.1 Tampilan visual**
+#### **5.3.4.2 Tampilan visual**
 
 ![dashboard](images/2/2-002-dashboard.png)
 
 gambar 5.3 halaman dashboard
-
-#### **5.3.4.1 komponen dashboard**
 
 ![login](images/5/disect-dashboard.png)
 
@@ -483,7 +479,7 @@ export const getPaguRealisasiUnitKerjaBySatker = async (
 3. lainnya
     - route `src\route.ts`
 
-#### **5.3.5.3 Tabel dan data**
+#### **5.3.5.4 Tabel dan Data**
 
 ![user-role-simple](images/4/user_roles-simple.png)
 
@@ -545,7 +541,7 @@ const iconMap: { [key: string]: LucideIcon } = {
 - pustaka [zustand](https://github.com/pmndrs/zustand)
 - data `src\actions\pengguna\preference.ts`
 
-#### **5.3.6.3 Tabel dan data**
+#### **5.3.6.4 Tabel dan Data**
 
 Ketika sistem menampilkan komponen tahun anggaran, sistem akan melihat data di `hook` `useTahunAnggaranStore`, jika belum ada maka akan membuat satu entri baru di tabel `user_preferences`, kemudian menyimpannya di `useTahunAnggaranStore`.
 
@@ -583,7 +579,7 @@ sistem akan menggunakan data tahun anggaran aktif dari hooks `useTahunAnggaranSt
 - komponen `src\components\navigation\search-input.tsx`
 - hooks `src\hooks\use-search-term.ts`
 
-#### **5.3.7.3 Cara Kerja**
+#### **5.3.7.5 Cara kerja**
 
 komponen ini merupakan `child component` dari navigation bar `src\components\navigation\navbar.tsx`. ketika pengguna mengetikkan kata kunci pencarian, komponen ini akan menyimpannya sebagai state `searchTerm` yang ada di `useSearchTerm`.
 
@@ -1298,7 +1294,6 @@ Fungsi ini bertanggung jawab untuk mengelola proses pengajuan rampungan untuk ke
 
 ![disect-pengajuan-honorium-tambah-jadwal](images/5/disect-pengajuan-honorium-tambah-jadwal.png)
 
-
 #### **5.3.15.2 File terkait**
 
 1. Komponen
@@ -1417,7 +1412,7 @@ const DaftarJadwal = ({
 2. Server action
     - updateJumlahJpJadwalNarasumber `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts`
 
-#### **5.3.16.3 cara kerja**
+#### **5.3.16.5 Cara kerja**
 
 saat komponen `DaftarJadwal` ditrigger oleh fungsi `handleOnSuccess` di `src\app\(route)\pengajuan\_components\honorarium\honorarium-container.tsx`. `DaftarJadwal` akan menjalankan effect dan mengambil data ke server melalui fungsi `getObPlainJadwalByKegiatanId` dan di set ke state `dataJadwal`
 
@@ -1579,7 +1574,7 @@ fungsi `updateJumlahJpJadwalNarasumber` pada `src\actions\honorarium\narasumber\
 
 ![verifikasi-rampungan](images/5/verifikasi-generate-rampungan.png)
 
-#### **5.3.17.3 Tabel dan data**
+#### **5.3.17.4 Tabel dan Data**
 
 pada proses verifikasi generate rampungan ini tabel-tabel yang berkaitan adalah `riwayat_pengajuan`, `kegiatan`, `spd`, `peserta_kegiatan`, `uh_dalam_negeri`, `uh_luar_negeri`, `itinerary`
 
@@ -1765,8 +1760,6 @@ fungsi `updateStatusRampungan` melakukan `upsertRiwayatPengajuan` dengan status 
   
 #### **5.3.18.4 Tabel dan data**
 
-
-
 #### **5.3.18.5 Cara kerja**
 
 Pengguna mengunggah dokumen data dukung menggunakan komponen [FormFileImmediateUpload](#5310-komponen-formfileimmediateupload)
@@ -1848,3 +1841,280 @@ export const updateStatusUhDalamNegeri = async (
   return updated;
 };
 ```
+
+### **5.3.19 Halaman Pengajuan UH Luar Negeri**
+
+untuk pengajuan UH luar negeri komponen dan cara kerjanya mirip dengan pengajuan UH dalam negeri. hanya formulir isiannya untuk upload dokumen lebh banyak
+
+![pengajuan-luar-negeri](images/5/pengajuan-luar-negeri.png)
+
+### **5.3.20 Halaman Verifikasi UH Dalam Negeri**
+
+#### **5.3.20.1 Route**
+
+<https://d01.pirsani.id/verifikasi>
+
+### **5.3.21 Halaman Verifikasi UH Luar Negeri**
+
+#### **5.3.21.1 Route**
+
+<https://d01.pirsani.id/verifikasi>
+
+#### **5.3.21.2 Tampilan visual**
+
+![verifikasi-uh-luar-negero](images/5/verifikasi-uh-luar-negeri.png)
+
+![verifikasi-uh-luar-negero](images/5/disect-verifikasi-uh-luar-negeri.png)
+
+![verifikasi-tabel-peserta-uh-luar-negero](images/5/disect-tabel-peserta-luar-negeri.png)
+
+#### **5.3.21.3 File terkait**
+
+1. **page** `src/app/(route)/verifikasi/page.tsx`
+
+2. **components**
+    - VerfikasiSelectionContainer `src/app/(route)/verifikasi/_components/verifikasi-selection-container.tsx`
+    - UangHarianLuarNegeriContainer `src/app/(route)/verifikasi/_components/uang-harian/luar-negeri-container.tsx`
+    - VerifikasiDataDukungUangHarianLuarNegeri `src/app/(route)/verifikasi/_components/uang-harian/data-dukung-luar-negeri.tsx`
+    - FloatingComponent: ResizableDraggable `src/components/floating-component.tsx`
+    - TabelHariPesertaKegiatan: TabelHariPesertaKegiatan `src/app/(route)/verifikasi/_components/uang-harian/tabel-peserta-kegiatan-luar-negeri.tsx`
+    - TableCellInput `src/components/datatable/table-cell-input.tsx`
+3. **server action**
+    - setujuiPengajuanUhLuarNegeri 
+
+#### **5.3.21.4 Tabel dan Data**
+
+#### **5.3.21.5 Cara kerja**
+
+Ketika pengguna mengubah cell pada kolom Hari Perjalanan, UH dan Diklat, saat event `onBlur` akan mentrigger fungsi `updateData` yang didefinisikan di komponen `TabelHariPesertaKegiatan` dan mengembalikan nilai `detailUhLuarNegeriPeserta:DetailUhLuarNegeriPeserta[]` yang telah diperbarui
+
+sedangkan jika pengguna menggubah pada cell header maka akan mentrigger `changeAllRowsColumnUhLuarNegeri` kemudian akan memperbarui state `detailUhLuarNegeriPeserta` menggunakan `setDetailUhLuarNegeriPeserta`
+
+```ts
+//src/components/datatable/table-cell-input.tsx
+
+export const TableCellInput = <T,>({
+  getValue,
+  row,
+  column,
+  table,
+  handleOnBlur = () => {},
+  className,
+  type = "number",
+}: ITableCellProps<T>) => {
+  const onBlur = () => {
+    if (
+      table.options.meta &&
+      typeof table.options.meta.updateData === "function"
+    ) {
+      console.log("row.index", row);
+      (table.options.meta.updateData as Function)(row.index, column.id, value);
+      handleOnBlur(value);
+      console.log("column.id", column.id);
+    } else {
+      console.error("updateData method is not available");
+    }
+  };
+}
+```
+
+```ts
+// src/app/(route)/verifikasi/_components/uang-harian/tabel-peserta-kegiatan-luar-negeri.tsx
+
+import { TableCellInput } from "@/components/datatable/table-cell-input";
+
+// Define column structure
+  const columns: ColumnDef<DetailUhLuarNegeriPeserta>[] = [
+// kode lainnya
+    {
+    accessorKey: "hPerjalanan",
+    header: "Hari Perjalanan",
+    cell: ({ getValue, row, column, table }) =>
+      TableCellInput({
+        getValue,
+        row,
+        column,
+        table,
+        className: "h-18 items-center justify-center p-2 ",
+      }),
+    meta: {
+      className: "items-center justify-center p-0 max-w-18",
+    },
+  },
+// kode lainnya
+  ]
+//kode lainnya
+  const table = useReactTable<DetailUhLuarNegeriPeserta>({
+// kode lainnya
+      meta: {
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        setDetailUhLuarNegeriPeserta((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              // kode lainnya
+              // update sesuai harinya
+              return updatedRow;
+            }
+            return row;
+          }))
+        }
+      }
+  })
+```
+
+rangkaian perubahan ini kemudian juga diteruskan ke komponen induknya `UangHarianLuarNegeriContainer` dan mentrigger `handleDetailUhLuarNegeriPesertaChange`
+
+```ts
+// src/app/(route)/verifikasi/_components/uang-harian/luar-negeri-container.tsx
+const handleDetailUhLuarNegeriPesertaChange = (
+    data: DetailUhLuarNegeriPeserta[]
+  ) => {
+    setDetailUhLuarNegeriPeserta(data);
+  };
+
+            <FloatingComponent hide={isPreviewHidden} onHide={handleOnHide}>
+            <TabelHariPesertaKegiatan
+              data={peserta}
+              onDataChange={handleDataChange}
+              onDetailUhLuarNegeriChange={handleDetailUhLuarNegeriPesertaChange}
+            />
+          </FloatingComponent>
+```
+
+data `detailUhLuarNegeriPeserta` pada `src/app/(route)/verifikasi/_components/uang-harian/luar-negeri-container.tsx` inilah yang kemudian akan dikirim ke server ketika pengguna menekan tombol `Setuju`
+
+```ts
+  const handleSetujuVerifikasiUhLuarNegeri = async () => {
+    if (!kegiatan || !pesertaUpdated) {
+      toast.error("Silakan periksa kembali data peserta");
+      return;
+    }
+    const updated = await setujuiPengajuanUhLuarNegeri(
+      kegiatan?.id,
+      pesertaUpdated,
+      detailUhLuarNegeriPeserta
+    );
+    if (updated.success) {
+      toast.success(
+        "Berhasil menverifikasi data peserta dan menyetujui pengajuan"
+      );
+    } else {
+      toast.error(`Terjadi kesalahan ${updated.error} ${updated.message}`);
+    }
+  };
+```
+
+fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uhLuarNegeri` 
+
+### **5.3.22 Halaman Daftar Nominatif Honorarium**
+
+#### **5.3.22.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.22.2 Tampilan visual**
+
+#### **5.3.22.3 File terkait**
+
+#### **5.3.22.4 Tabel dan Data**
+
+#### **5.3.22.5 Cara kerja**
+
+### **5.3.23 Halaman Daftar Nominatif UH Dalam Negeri**
+
+#### **5.3.23.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.23.2 Tampilan visual**
+
+#### **5.3.23.3 File terkait**
+
+#### **5.3.23.4 Tabel dan Data**
+
+#### **5.3.23.5 Cara kerja**
+
+### **5.3.24 Halaman Daftar Nominatif UH Luar Negeri**
+
+#### **5.3.24.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.24.2 Tampilan visual**
+
+#### **5.3.24.3 File terkait**
+
+#### **5.3.24.4 Tabel dan Data**
+
+#### **5.3.24.5 Cara kerja**
+
+### **5.3.25 Halaman Pembayaran**
+
+#### **5.3.25.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.25.2 Tampilan visual**
+
+#### **5.3.25.3 File terkait**
+
+#### **5.3.25.4 Tabel dan Data**
+
+#### **5.3.25.5 Cara kerja**
+
+### **5.3.26 Halaman Pembayaran Honorarium**
+
+#### **5.3.26.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.26.2 Tampilan visual**
+
+#### **5.3.26.3 File terkait**
+
+#### **5.3.26.4 Tabel dan Data**
+
+#### **5.3.26.5 Cara kerja**
+
+### **5.3.27 Halaman Pembayaran UH Dalam Negeri**
+
+#### **5.3.27.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.27.2 Tampilan visual**
+
+#### **5.3.27.3 File terkait**
+
+#### **5.3.27.4 Tabel dan Data**
+
+#### **5.3.27.5 Cara kerja**
+
+### **5.3.28 Halaman Pembayaran UH Dalam Negeri**
+
+#### **5.3.28.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.28.2 Tampilan visual**
+
+#### **5.3.28.3 File terkait**
+
+#### **5.3.28.4 Tabel dan Data**
+
+#### **5.3.28.5 Cara kerja**
+
+
+### **5.3.29 Halaman Data Referensi**
+
+#### **5.3.29.1 Route**
+
+<https://d01.pirsani.id/daftar-nominatif>
+
+#### **5.3.29.2 Tampilan visual**
+
+#### **5.3.29.3 File terkait**
+
+#### **5.3.29.4 Tabel dan Data**
+
+#### **5.3.29.5 Cara kerja**

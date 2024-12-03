@@ -28,7 +28,7 @@
         | **3**| Input Pencarian  |                                                         |
         | **4**| Satker Aktif     | Menunjukkan satker anggaran                             |
         | **5**| Tahun Anggaran   | Pilihan tahun anggaran yang dipilih dan aktif           |
-        | **6**| Icon Pengguna    | Ikon Pengguna, jika diklik akan menampilkan profil pengguna <br/> dan tombol signout           |
+        | **6**| Icon Pengguna    | Ikon Pengguna, jika diklik akan menampilkan profil pengguna dan tombol signout           |
         | **7**| Konten           | akan berisi halaman/tabel/form sesuai menu yang sedang aktif |
 
 ## **2.1 Login**
