@@ -1137,6 +1137,41 @@ Komponen `PengajuanContainer` adalah komponen React untuk mengelola proses penga
 - Komponen `SelectKegiatan` digunakan untuk memilih kegiatan. Ketika kegiatan berubah, event handler `handleKegiatanChange` dipanggil untuk mengatur ID kegiatan dan mereset `jenisPengajuan`.
 - Setelah ID kegiatan diatur, efek samping di `useEffect` akan memanggil fungsi asinkron `getKegiatanById` dan `getLogProses` untuk mengambil detail kegiatan dan log prosesnya, lalu menyimpan hasilnya ke dalam state.
 
+`SelectKegiatan` akan memilih kegiatan sesuai dengan alur proses yang sedang dipilih
+
+```ts
+// src\components\form\select-kegiatan.tsx
+interface SelectKegiatanProps {
+  inputId: string;
+  onChange?: (value: string | null) => void;
+  value?: string;
+  className?: string;
+  proses?: ALUR_PROSES | null;
+}
+const SelectKegiatan = ({
+  inputId,
+  onChange = () => {},
+  value,
+  className,
+  proses,
+}: SelectKegiatanProps) => {
+// kode lainnya  
+useEffect(() => {
+    const fetchOptions = async () => {
+      if (proses) {
+        const optionsKegiatan = await getOptionsKegiatanOnAlurProses(proses);
+        return setOptions(optionsKegiatan);
+      } else {
+        const optionsKegiatan = await getOptionsKegiatan();
+        return setOptions(optionsKegiatan);       
+      }
+    };
+    fetchOptions();
+  }, [tahunAnggaran, proses]);
+}
+
+```
+
 ##### **Jenis Pengajuan**
 
 - Komponen `ButtonsPengajuan` menyediakan tombol untuk memilih jenis pengajuan seperti `HONORARIUM`, `UH_DALAM_NEGERI`, atau `UH_LUAR_NEGERI`. Pilihan jenis pengajuan akan diatur melalui event handler `handleSelection`.
@@ -1564,6 +1599,47 @@ fungsi `updateJumlahJpJadwalNarasumber` pada `src\actions\honorarium\narasumber\
   }
 ```
 
+#### **5.3.16.6 Pengajuan Honorarium**
+
+Terdapat tombol `Ajukan` pada `src\components\kegiatan\honorarium\daftar-jadwal.tsx` di dalam form `FormProsesPengajuan`
+
+```ts
+// src\components\kegiatan\honorarium\daftar-jadwal.tsx
+import updateStatusPengajuanPembayaran from "@/actions/honorarium/narasumber/proses-pengajuan-pembayaran";
+
+const handleProsesPengajuan = async (jadwalId: string) => {
+  const newStatus: STATUS_PENGAJUAN = "SUBMITTED";
+  const updateStatus = await updateStatusPengajuanPembayaran(
+    jadwalId,
+    newStatus
+  );
+// kode lainnya 
+};
+
+const FormProsesPengajuan = ({
+  jadwalId,
+  statusPengajuanHonorarium,
+  onSuccess = () => {},
+}: FormProsesPengajuanProps) => {
+// kode lainnya 
+return (
+  <>
+  {isShowButton && (
+        <div className="flex flex-col px-4 py-2 w-full border-t border-gray-300 gap-2">
+          <div className="flex flex-row justify-between">
+            <Button className="" type="button" onClick={handleOnClick}>
+              Ajukan
+            </Button>
+          </div>
+        </div>
+      )}
+  </>)
+}
+```
+
+fungsi `updateStatusPengajuanPembayaran` ini yang nantinya akan membuat entri baru di tabel `riwayat_pengajuan`.
+skema database dapat dilihat di [#4232-skema-database-untuk-proses-pengajuan-honorarium](database.md/#4232-skema-database-untuk-proses-pengajuan-honorarium)
+
 ### **5.3.17 Halaman Verifikasi Generate Rampungan**
 
 #### **5.3.17.1 Route**
@@ -1848,19 +1924,13 @@ untuk pengajuan UH luar negeri komponen dan cara kerjanya mirip dengan pengajuan
 
 ![pengajuan-luar-negeri](images/5/pengajuan-luar-negeri.png)
 
-### **5.3.20 Halaman Verifikasi UH Dalam Negeri**
+### **5.3.20 Halaman Verifikasi UH Luar Negeri**
 
 #### **5.3.20.1 Route**
 
 <https://d01.pirsani.id/verifikasi>
 
-### **5.3.21 Halaman Verifikasi UH Luar Negeri**
-
-#### **5.3.21.1 Route**
-
-<https://d01.pirsani.id/verifikasi>
-
-#### **5.3.21.2 Tampilan visual**
+#### **5.3.20.2 Tampilan visual**
 
 ![verifikasi-uh-luar-negero](images/5/verifikasi-uh-luar-negeri.png)
 
@@ -1868,7 +1938,7 @@ untuk pengajuan UH luar negeri komponen dan cara kerjanya mirip dengan pengajuan
 
 ![verifikasi-tabel-peserta-uh-luar-negero](images/5/disect-tabel-peserta-luar-negeri.png)
 
-#### **5.3.21.3 File terkait**
+#### **5.3.20.3 File terkait**
 
 1. **page** `src/app/(route)/verifikasi/page.tsx`
 
@@ -1880,11 +1950,11 @@ untuk pengajuan UH luar negeri komponen dan cara kerjanya mirip dengan pengajuan
     - TabelHariPesertaKegiatan: TabelHariPesertaKegiatan `src/app/(route)/verifikasi/_components/uang-harian/tabel-peserta-kegiatan-luar-negeri.tsx`
     - TableCellInput `src/components/datatable/table-cell-input.tsx`
 3. **server action**
-    - setujuiPengajuanUhLuarNegeri 
+    - setujuiPengajuanUhLuarNegeri `src\actions\kegiatan\uang-harian\verifikasi-luar-negeri.ts`
 
-#### **5.3.21.4 Tabel dan Data**
+#### **5.3.20.4 Tabel dan Data**
 
-#### **5.3.21.5 Cara kerja**
+#### **5.3.20.5 Cara kerja**
 
 Ketika pengguna mengubah cell pada kolom Hari Perjalanan, UH dan Diklat, saat event `onBlur` akan mentrigger fungsi `updateData` yang didefinisikan di komponen `TabelHariPesertaKegiatan` dan mengembalikan nilai `detailUhLuarNegeriPeserta:DetailUhLuarNegeriPeserta[]` yang telah diperbarui
 
@@ -2004,23 +2074,132 @@ data `detailUhLuarNegeriPeserta` pada `src/app/(route)/verifikasi/_components/ua
   };
 ```
 
-fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uhLuarNegeri` 
+fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uhLuarNegeri`
 
-### **5.3.22 Halaman Daftar Nominatif Honorarium**
+### **5.3.21 Halaman Verifikasi UH Dalam Negeri**
+
+#### **5.3.21.1 Route**
+
+<https://d01.pirsani.id/verifikasi>
+
+#### **5.3.21.2 Tampilan Visual**
+
+![verifikasi-uh-dalam-negeri](images/5/verifikasi-uh-dalam-negeri.png)
+
+![verifikasi-uh-dalam-negeri](images/5/disect-verifikasi-uh-dalam-negeri.png)
+
+#### **5.3.21.3 File terkait**
+
+1. **page** `src/app/(route)/verifikasi/page.tsx`
+
+2. **components**
+    - VerfikasiSelectionContainer `src/app/(route)/verifikasi/_components/verifikasi-selection-container.tsx`
+    - UangHarianDalamNegeriContainer `src/app/(route)/verifikasi/_components/uang-harian/dalam-negeri-container.tsx`
+    - VerifikasiDataDukungUangHarianDalamNegeri `src\app\(route)\verifikasi\_components\uang-harian\data-dukung-dalam-negeri.tsx`
+    - FloatingComponent: ResizableDraggable `src/components/floating-component.tsx`
+    - TabelHariPesertaKegiatan: TabelHariPesertaKegiatan `src\app\(route)\verifikasi\_components\uang-harian\tabel-peserta-kegiatan-dalam-negeri.tsx`
+    - TableCellInput `src/components/datatable/table-cell-input.tsx`
+3. **server action**
+    - setujuiPengajuanUhDalamNegeri `src\actions\kegiatan\uang-harian\verifikasi-dalam-negeri.ts`
+
+#### **5.3.21.4 Tabel dan data**
+
+#### **5.3.21.5 Cara kerja**
+
+Cara kerja untuk `TabelHariPesertaKegiatan` mirip dengan untuk tabel luar negeri. setiap perubahan hari yang ada di tabel kemudian diteruskan ke induk handlernya
+
+```ts
+// src\app\(route)\verifikasi\_components\uang-harian\dalam-negeri-container.tsx
+  const handleDataChange = (data: PesertaKegiatanDalamNegeri[]) => {
+    setPesertaUpdated(data);
+  };
+
+          <FloatingComponent hide={isPreviewHidden} onHide={handleOnHide}>
+            <TabelHariPesertaKegiatan
+              data={peserta}
+              onDataChange={handleDataChange}
+            />            
+          </FloatingComponent>
+```
+
+setelah jumlah hari diubah dan diverifikasi kemudian pengguna dapat menyetujui 
+
+```ts
+// src\app\(route)\verifikasi\_components\uang-harian\dalam-negeri-container.tsx
+import setujuiPengajuanUhDalamNegeri from "@/actions/kegiatan/uang-harian/verifikasi-dalam-negeri";
+
+const handleSetujuVerifikasiUhDalamNegeri = async () => {
+    const updated = await setujuiPengajuanUhDalamNegeri(
+      kegiatan?.id,
+      pesertaUpdated
+    );
+  };
+
+  // kode lainnya 
+            <Button
+            type="button"
+            className="w-full"
+            onClick={handleSetujuVerifikasiUhDalamNegeri}
+          >
+            Setuju
+          </Button>
+```
+
+fungsi `setujuiPengajuanUhDalamNegeri` akan melakukan update ke tabel `riwayat_pengajuan` dan juga `uh_dalam_negeri`
+
+
+### **5.3.22 Halaman Verifikasi Honorarium**
 
 #### **5.3.22.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+<https://d01.pirsani.id/verifikasi>
 
 #### **5.3.22.2 Tampilan visual**
 
+Tampilan visual untuk preview kegiatan sama seperti untuk verifikasi UH. sedangkan Formulir untuk verifikasi Honorium mirip dengan formulir pengajuan Honorarium.
+
+![verifikasi-honorarium](images/5/verifikasi-honorarium.png)
+
 #### **5.3.22.3 File terkait**
+
+1. **Page** `src\app\(route)\verifikasi\page.tsx`
+2. **components**
+    - VerifikasiContainer `src\app\(route)\verifikasi\_components\verifikasi-container.tsx`
+    - VerfikasiSelectionContainer `src\app\(route)\verifikasi\_components\verifikasi-selection-container.tsx`
+    - DaftarJadwal `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+    - FormProsesVerifikasi `src\components\kegiatan\honorarium\daftar-jadwal.tsx`
+3. **action server**
+    - updateStatusPengajuanPembayaran `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts`
 
 #### **5.3.22.4 Tabel dan Data**
 
+lihat [skema](database.md/#4232-skema-database-untuk-proses-pengajuan-honorarium)
+
 #### **5.3.22.5 Cara kerja**
 
-### **5.3.23 Halaman Daftar Nominatif UH Dalam Negeri**
+Pada saat **Verifikasi** pengguna dapat merubah Jenis Honorarium yang diajukan kemudian melakukan `Update Jenis dan JP`
+
+sedangkan fungsi `updateStatusPengajuanPembayaran` hanya merubah nilai pada kolom `status` menjadi `APPROVED` pada tabel `riwayat_pengajuan`
+
+```ts
+// src\components\kegiatan\honorarium\daftar-jadwal.tsx
+const handleProsesVerifikasiSetuju = async (jadwalId: string) => {
+  //console.log(jadwalId);
+  const newStatus: STATUS_PENGAJUAN = "APPROVED";
+  const updateStatus = await updateStatusPengajuanPembayaran(
+    jadwalId,
+    newStatus
+  );
+  if (updateStatus.success) {
+    toast.success("Pengajuan berhasil diajukan");
+  } else {
+    toast.error(`Pengajuan gagal diajukan : ${updateStatus.message}`);
+  }
+  return updateStatus;
+};
+```
+
+### **5.3.23 Halaman Daftar Nominatif UH Dalam Negeri dan Luar Negeri**
 
 #### **5.3.23.1 Route**
 
@@ -2028,13 +2207,227 @@ fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uh
 
 #### **5.3.23.2 Tampilan visual**
 
+![daftar-nominatif](images/5/daftar-nominatif-uh.png)
+
 #### **5.3.23.3 File terkait**
+
+1. **page** `src\app\(route)\daftar-nominatif\page.tsx`
+2. **component**
+    - SelectKegiatan `src\components\form\select-kegiatan.tsx`
+    - SelectJenisPengajuan `src\app\(route)\daftar-nominatif\_components\select-jenis-pengajuan.tsx`
+    - SelectBendahara `src\components\form\select-bendahara.tsx`
+    - DaftarNominatifContainer `src\app\(route)\daftar-nominatif\_components\daftar-nominatif-container.tsx`
+    - FormNominatifPembayaranUh `src\app\(route)\daftar-nominatif\_components\form-nominatif-uh.tsx`
+3. **server action**
+    - updateBendaharaPpkNominatifUhLuarNegeri `src\actions\kegiatan\uang-harian\nominatif-luar-negeri.ts`
+    - updateBendaharaPpkNominatifUhDalamNegeri `src\actions\kegiatan\uang-harian\nominatif-dalam-negeri.ts`
+4. **api Endpoint** `/download/`
+5. **pdf handler**
+    - library [pdfkit](https://pdfkit.org/)
+    - generateTabelDinamis `@/lib/pdf/tabel-nominatif-dinamis-uh`
+    - downloadNominatifUhDalamNegeri `src\app\(route)\download\[...slug]\generator-tabel-nominatif-uh-dalam-negeri.ts`
+    - downloadNominatifUhLuarNegeri `src\app\(route)\download\[...slug]\generator-tabel-nominatif-uh-luar-negeri.ts`
 
 #### **5.3.23.4 Tabel dan Data**
 
-#### **5.3.23.5 Cara kerja**
+#### **5.3.23.5 Cara kerja Generate Nominatif Uang Harian**
 
-### **5.3.24 Halaman Daftar Nominatif UH Luar Negeri**
+komponen `SelectJenisPengajuan` menyediakan opsi jenis pengajuan sesuai dengan kegiatan yang dipilih, sedangkan `SelectBendahara` menyediakan opsi pengelola keuangan sesuai satker anggaran pengguna.
+
+Tombol `Generate` akan memanggil fungsi `handleGenerate`, memperbarui data `bendaharaId` dan `ppkId` di tabel `riwayat_pengajuan`.
+
+```ts
+// src\app\(route)\daftar-nominatif\_components\form-nominatif-uh.tsx
+import updateBendaharaPpkNominatifUhDalamNegeri from "@/actions/kegiatan/uang-harian/nominatif-dalam-negeri";
+import updateBendaharaPpkNominatifUhLuarNegeri from "@/actions/kegiatan/uang-harian/nominatif-luar-negeri";
+// kode lainnya
+  const handleGenerate = async () => {
+    switch (jenisPengajuan) {
+      case "UH_LUAR_NEGERI":
+        const updateBendaharaPpkUhLn =
+          await updateBendaharaPpkNominatifUhLuarNegeri(
+            kegiatanId,
+            bendaharaId,
+            ppkId
+          );
+        if (updateBendaharaPpkUhLn.success) {
+          window.open(
+            `/download/nominatif-uh-luar-negeri/${kegiatanId}`,
+            "_blank"
+          );
+        } else {
+          toast.error("Gagal mengupdate bendahara dan ppk");
+        }
+
+        break;
+      case "UH_DALAM_NEGERI":
+        const updateBendaharaPpkUhDn =
+          await updateBendaharaPpkNominatifUhDalamNegeri(
+            kegiatanId,
+            bendaharaId,
+            ppkId
+          );
+
+        if (updateBendaharaPpkUhDn.success) {
+          window.open(
+            `/download/nominatif-uh-dalam-negeri/${kegiatanId}`,
+            "_blank"
+          );
+        } else {
+          toast.error("Gagal mengupdate bendahara dan ppk");
+        }
+
+        break;
+      default:
+        break;
+    }
+    console.log(jadwalId);
+  };
+```
+
+jika proses ini berhasil, sistem akan membuka tab baru dan membuka halaman `/downlod`, lihat [Cara kerja API end poin /api/upload](#53104-cara-kerja-api-end-poin-apiupload)
+
+Generator pdf untuk Uang harian menggunakan template yang sama yaitu `@/lib/pdf/tabel-nominatif-dinamis-uh";`
+
+> **PERHATIAN**
+> untuk penghitungan, digunakan `decimal.js` untuk memastikan tingkat presisi saat penghitungan
+>
+
+```ts
+import generateTabelDinamis, {
+  DataGroup,
+  TableColumnHeader,
+  TableDinamisOptions,
+  TableFooterOptions,
+  TableOptions,
+  TableRow,
+} from "@/lib/pdf/tabel-nominatif-dinamis-uh";
+```
+
+```ts
+// src\lib\pdf\tabel-nominatif-dinamis-uh.ts
+export interface TableDinamisOptions {
+  layout?: "landscape" | "portrait";
+  satker: string;
+  tableTitle: string;
+  tableSubtitle: string;
+  tableData: DataGroup[];
+  tableColumnHeaders: TableColumnHeader[];
+  tableOptions: TableOptions;
+  tableFooterOptions: TableFooterOptions;
+}
+
+export async function generateTabelDinamis(
+  options: TableDinamisOptions  
+) {
+
+  //desctucturing
+  const {
+    layout = "landscape",
+    satker,
+    tableTitle,
+    tableSubtitle,
+    tableData,
+    tableColumnHeaders,
+    tableOptions,
+    tableFooterOptions,
+  } = options;
+
+  const {
+    startX,
+    startY,
+    headerRowHeight,
+    headerNumberingRowHeight,
+    dataRowHeight,
+    startYonFirstPage,
+  } = tableOptions;
+  const customFontPath = path.resolve(
+    process.cwd(),
+    "fonts/helvetica/Helvetica.ttf"
+  );
+
+  const doc = new PDFDocument({
+    font: customFontPath,
+    size: "A4",
+    margins: { top: 15, bottom: 15, left: 10, right: 15 },
+    layout: layout,
+  });
+
+  // Buffers to hold PDF data
+  const buffers: Buffer[] = [];
+
+  // Listen for data and end events
+  doc.on("data", buffers.push.bind(buffers));
+
+  // Generate PDF content
+
+  try {
+
+    generateReportHeader(doc, satker, tableTitle, tableSubtitle);
+
+    const { summableColumns, pageSumsArray } = generateTable(
+      doc,
+      tableColumnHeaders,
+      tableData,
+      startX,
+      startY,
+      startYonFirstPage,
+      headerRowHeight,
+      headerNumberingRowHeight,
+      dataRowHeight
+    );
+
+    // how to detect last start y
+    // Detect current x and y coordinates
+    let currentX = doc.x;
+    let currentY = doc.y;
+    console.log(`Current X: ${currentX}, Current Y: ${currentY}`);
+
+    // mulai dari sini generate footer
+    const { kiri, kanan, placeAndDateText } = tableFooterOptions;
+    const doctWidth = doc.page.width;
+    console.log("doc.page.width", doctWidth);
+
+    const add12ifPlaceAndDateText = placeAndDateText ? 12 : 0;
+
+    let y1 = currentY + 20 + add12ifPlaceAndDateText;
+    let y2 = y1 + 50;
+    let x1 = startX;
+    let x2 = doctWidth - 300;
+
+    // check if need to add page if the last row is near the end of the page
+    const availableHeight = doc.page.height - 60;
+    const isPageNeeded = y1 + 75 > availableHeight;
+    if (isPageNeeded) {
+      doc.addPage();
+      // tambahkan total lagi disini ?
+      x1 = startX;
+      x2 = doctWidth - 300;
+      y1 = startY;
+      y2 = y1 + 50;
+    }
+
+    generateReportFooter(doc, x1, x2, y1, y2, kiri, kanan, placeAndDateText);
+
+    doc.end();
+    // Wait for 'end' event to ensure the document generation is complete
+    await once(doc, "end");
+    // Concatenate the buffers once the PDF generation is complete
+    const pdfBuffer = Buffer.concat(buffers);
+    return { pdfBuffer, summableColumns, pageSumsArray };
+  } catch (error) {
+    throw new Error("Failed to generate PDF");
+  }
+}
+```
+
+#### **5.3.23.6 Cara kerja Pengajuan Pembayaran**
+
+tombol `Ajukan Pembayaran` akan menjalankan fungsi `pengajuanPembayaranUangHarian` di `src\actions\kegiatan\uang-harian\nominatif.ts`.
+
+fungsi ini akan memperbarui data di tabel `riwayat_pengajuan` dan juga memindahkan dokumen yang diunggah ke folder final
+
+### **5.3.24 Halaman Daftar Nominatif Honorarium**
 
 #### **5.3.24.1 Route**
 
@@ -2042,11 +2435,30 @@ fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uh
 
 #### **5.3.24.2 Tampilan visual**
 
+![daftar-nominatif-honorarium](images/5/daftar-nominatif-honorarium.png)
+
 #### **5.3.24.3 File terkait**
+
+1. **page** `src\app\(route)\daftar-nominatif\page.tsx`
+2. **component**
+    - SelectKegiatan `src\components\form\select-kegiatan.tsx`
+    - SelectJenisPengajuan `src\app\(route)\daftar-nominatif\_components\select-jenis-pengajuan.tsx`
+    - SelectBendahara `src\components\form\select-bendahara.tsx`
+    - DaftarNominatifContainer `src\app\(route)\daftar-nominatif\_components\daftar-nominatif-container.tsx`
+    - FormNominatifPembayaranHonorarium `src\app\(route)\daftar-nominatif\_components\form-nominatif-honorarium.tsx`
+3. **server action**
+    - pengajuanPembayaranHonorarium `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts`
+4. **api Endpoint** `/download/`
+5. **pdf handler**
+    - library [pdfkit](https://pdfkit.org/)
+    - generateTabelDinamis `src\lib\pdf\tabel-nominatif-dinamis.ts`
+    - downloadNominatifHonorarium `src\app\(route)\download\[...slug]\generator-tabel-nominatif-honorarium.ts`
 
 #### **5.3.24.4 Tabel dan Data**
 
 #### **5.3.24.5 Cara kerja**
+
+cara kerja generate Pdf serta pengajuan pembayaran mirip dengan nominatif Uang Harian
 
 ### **5.3.25 Halaman Pembayaran**
 
@@ -2103,7 +2515,6 @@ fungsi `setujuiPengajuanUhLuarNegeri` akan melakukan pembaruan data di tabel `uh
 #### **5.3.28.4 Tabel dan Data**
 
 #### **5.3.28.5 Cara kerja**
-
 
 ### **5.3.29 Halaman Data Referensi**
 
