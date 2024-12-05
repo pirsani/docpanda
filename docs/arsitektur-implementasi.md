@@ -2460,72 +2460,306 @@ fungsi ini akan memperbarui data di tabel `riwayat_pengajuan` dan juga memindahk
 
 cara kerja generate Pdf serta pengajuan pembayaran mirip dengan nominatif Uang Harian
 
-### **5.3.25 Halaman Pembayaran**
+### **5.3.25 Halaman Pembayaran Honorarium**
 
 #### **5.3.25.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+- daftar pembayaran <https://d01.pirsani.id/daftar-nominatif>
+- pembayaran honorarium `https://d01.pirsani.id/pembayaran/honorarium/{kegiatanId}/{riwayatPengajuanId}`
 
 #### **5.3.25.2 Tampilan visual**
 
+![pembayaran-daftar-siap-bayar](images/5/pembayaran-daftar-siap-bayar.png)
+
+![pembayaran-honorarium](images/5/pembayaran-honorarium.png)
+
 #### **5.3.25.3 File terkait**
+
+1. **page**
+    - daftar pembayaran `src\app\(route)\pembayaran\page.tsx`
+    - pembayaran honorarium `src\app\(route)\pembayaran\honorarium\[...slug]\page.tsx`
+2. **components**
+    - TabelPengajuanPembayaran `src\app\(route)\pembayaran\_components\tabel-pengajuan-pembayaran.tsx`
+    - ContainerPembayaran `src\app\(route)\pembayaran\honorarium\_components\container-pembayaran.tsx`
+    - FormPembayaran `src\app\(route)\pembayaran\honorarium\_components\form-pembayaran.tsx`
+    - DlBuktiPembayaran `src\app\(route)\pembayaran\honorarium\_components\dl-bukti-pembayaran.tsx`
+3. **server action**
+    - updateBuktiPembayaranHonorarium `src\actions\honorarium\narasumber\proses-pengajuan-pembayaran.ts`
 
 #### **5.3.25.4 Tabel dan Data**
 
 #### **5.3.25.5 Cara kerja**
 
-### **5.3.26 Halaman Pembayaran Honorarium**
+fungsi `updateBuktiPembayaranHonorarium` melakukan update tabel riwayat_pengajuan dan memindahkan dokumen yang diunggah ke folder final
+
+### **5.3.26 Halaman Pembayaran Uang harian**
 
 #### **5.3.26.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+- daftar pembayaran <https://d01.pirsani.id/daftar-nominatif>
+- pembayaran uang harian `https://d01.pirsani.id/pembayaran/uh/{kegiatanId}/{riwayatPengajuanId}`
 
 #### **5.3.26.2 Tampilan visual**
 
+![pembayaran-uh](images/5/pembayaran-uh-dalam-negeri.png)
+
 #### **5.3.26.3 File terkait**
+
+1. **page**
+    - daftar pembayaran `src\app\(route)\pembayaran\page.tsx`
+    - pembayaran UH `src\app\(route)\pembayaran\uh\[...slug]\page.tsx`
+2. **components**
+    - TabelPengajuanPembayaran `src\app\(route)\pembayaran\_components\tabel-pengajuan-pembayaran.tsx`
+    - ContainerPembayaran `src\app\(route)\pembayaran\uh\_components\container-pembayaran.tsx`
+    - FormPembayaran `src\app\(route)\pembayaran\uh\_components\form-pembayaran.tsx`
+    - DlBuktiPembayaran `src\app\(route)\pembayaran\uh\_components\dl-bukti-pembayaran.tsx`
+3. **server action**
+    - updateBuktiPembayaran `src\actions\kegiatan\uang-harian\bukti-pembayaran.ts`
 
 #### **5.3.26.4 Tabel dan Data**
 
 #### **5.3.26.5 Cara kerja**
 
-### **5.3.27 Halaman Pembayaran UH Dalam Negeri**
+fungsi `updateBuktiPembayaran` melakukan update tabel riwayat_pengajuan dan memindahkan dokumen yang diunggah ke folder final
+
+### **5.3.27 Halaman Pending Matters**
 
 #### **5.3.27.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+<https://d01.pirsani.id/pending>
 
 #### **5.3.27.2 Tampilan visual**
 
+![pending-matters](images/5/disect-pending-matters.png)
+
 #### **5.3.27.3 File terkait**
+
+1. **page** `src\app\(route)\(dashboard)\pending\page.tsx`
+2. **components**
+    - Container `src\app\(route)\(dashboard)\pending\_components\container-pending.tsx`
+    - TabelRiwayatPengajuan `src\app\(route)\(dashboard)\pending\_components\tabel-riwayat-pengajuan.tsx`
+    - DialogUnggahDokumen `src\app\(route)\(dashboard)\pending\_components\dialog-unggah-dokumen.tsx`
+    - DialogVerifikasiDokumenAkhir `src\app\(route)\(dashboard)\pending\_components\dialog-verifikasi-dokumen-akhir.tsx`
+3. **action server**
+    - UpdateDokumenAkhirRiwayatPengajuan `src\actions\kegiatan\dokumen-akhir\dokumen-akhir.ts`
+    - verifikasiDokumenAkhir `src\actions\kegiatan\dokumen-akhir\verifikasi-dokumen-akhir.ts`
+    - getRiwayatPengajuanUntukDokumenAkhir `src\data\kegiatan\riwayat-pengajuan.ts`
 
 #### **5.3.27.4 Tabel dan Data**
 
 #### **5.3.27.5 Cara kerja**
 
-### **5.3.28 Halaman Pembayaran UH Dalam Negeri**
+Halaman pending menampilkan semua pengajuan dengan status `PAID`, fungsi `UpdateDokumenAkhirRiwayatPengajuan` pada dialog `DialogUnggahDokumen` akan memperbarui data `riwayat_pengajuan` dan memindahkan dokumen yang diupload ke folder final.
+
+fungsi `verifikasiDokumenAkhir` menandai status `riwayat_pengajuan` dengan `END`. dengan demikian seluruh alur pengajuan telah selesai.
+
+### **5.3.28 Halaman Workbench**
 
 #### **5.3.28.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+<https://d01.pirsani.id/workbench>
 
 #### **5.3.28.2 Tampilan visual**
 
+![workbench](images/5/disect-workbench.png)
+
 #### **5.3.28.3 File terkait**
+
+1. **page** `src\app\(route)\(dashboard)\workbench\page.tsx`
+2. **components**
+    - ContainerTabelWithFilterStatus `src\app\(route)\(dashboard)\workbench\_components\container-tabel-with-filter-status.tsx`
+    - TabelKegiatan `src\app\(route)\(dashboard)\workbench\_components\tabel-kegiatan.tsx`
+    - FilterStatus `src\app\(route)\(dashboard)\workbench\_components\filter-status.tsx`
+    - TabelExpandable `src\components\tabel-expandable.tsx`
 
 #### **5.3.28.4 Tabel dan Data**
 
 #### **5.3.28.5 Cara kerja**
 
+tabel `TabelKegiatan` menampilkan semua data pengajuan yang didapat dari fungsi `getKegiatan` sedangkan komponen `FilterStatus` menampilkan data yang didapat dari `getCountStatusPengajuan`
+
+ketika pengguna menekan salah satu filter status maka data akan diambil kembali dari server menggunakan fungsi `getKegiatanHasStatusPengajuan`
+
+```ts
+// src\app\(route)\(dashboard)\workbench\_components\container-tabel-with-filter-status.tsx
+  const handleOnStatusChange = async (status: STATUS_PENGAJUAN | null) => {
+    setFilterStatus(status);
+    setData([]);
+    const kegiatan = await getKegiatanHasStatusPengajuan(status);
+    setData(kegiatan);
+  };
+```
+
+ketika pengguna melihat detil maka sistem akan menjalankan fungsi `handleExpand` yang didalamnya menjalankan fungsi `getRiwayatPengajuanByKegiatanIdAndJenisPengajuan` dan `getObPlainJadwalByKegiatanId` untuk mendapatkan detil riwayat pengajuan dari setiap kegiatan.
+
+```ts
+// import { getRiwayatPengajuanByKegiatanIdAndJenisPengajuan } from "@/data/kegiatan/riwayat-pengajuan";
+let newDetails: RowDetail[] = [];
+const riwayatRampungan =
+      await getRiwayatPengajuanByKegiatanIdAndJenisPengajuan(
+        rowId,
+        JENIS_PENGAJUAN.GENERATE_RAMPUNGAN
+      );
+newDetails.push(newRiwayatRampungan);
+const riwayatPengajuanUhLuarNegeri =
+      await getRiwayatPengajuanByKegiatanIdAndJenisPengajuan(
+        rowId,
+        JENIS_PENGAJUAN.UH_LUAR_NEGERI
+      );
+newDetails.push(newRiwayatPengajuanUhLuarNegeri);
+const riwayatPengajuanUhDalamNegeri =
+      await getRiwayatPengajuanByKegiatanIdAndJenisPengajuan(
+        rowId,
+        JENIS_PENGAJUAN.UH_DALAM_NEGERI
+      );
+newDetails.push(newRiwayatPengajuanUhDalamNegeri);
+const jadwals = await getObPlainJadwalByKegiatanId(rowId);
+newDetails.push(...newDetailsJadwal);
+```
+
+untuk setiap detil riwayat pengajuan dari kegiatan kemudian akan di mapping ke kegiatan
+
+```ts
+    const newRowDetails = {
+      ...rowDetails,
+      [rowId]: newDetails,
+    };
+
+    setRowDetails(newRowDetails);
+
+    setExpanded((prev) => ({
+      ...prev,
+      [index]: !prev[index], // Allow multiple rows to be expanded
+    }));
+```
+
 ### **5.3.29 Halaman Data Referensi**
 
 #### **5.3.29.1 Route**
 
-<https://d01.pirsani.id/daftar-nominatif>
+<https://d01.pirsani.id/data-referensi/{jenis-refernsi}>
 
 #### **5.3.29.2 Tampilan visual**
 
+![disect-data-referensi](images/5/disect-data-referensi.png)
+
+![disect-data-referensi-excel](images/5/disect-data-referensi-export-excel.png)
+
 #### **5.3.29.3 File terkait**
+
+1. **components**
+    - TabelGeneric `src\components\tabel-generic.tsx`
+    - Dialog `@/components/ui/dialog`
+    - TabelGenericWithoutInlineEdit `src\components\tabel-generic-without-inline-edit.tsx`
+    - ExcelContainer `src\app\(route)\data-referensi\_components\excel-container.tsx`
+    - TabelDariExcel `src\components\tabel-dari-excel.tsx`
 
 #### **5.3.29.4 Tabel dan Data**
 
 #### **5.3.29.5 Cara kerja**
+
+Pada fitur Data referensi terdapat 2 (Kelompok) untuk entri data yaitu:
+
+1. dengan isian Form
+    - Narasumber, Materi, Kelas, SBM Transpor, Pengelola Keuangan, Satker Anggaran, Unit Kerja, Pagu, SP2D, Negara, Provinsi, Role, Pengguna
+2. dengan import excel
+    - SBM Honorarium, SBM UH Dalam Negeri, SBM UH Luar Negeri, SBH Uang Representasi,  
+
+#### **5.3.29.6 Cara kerja import excel**
+
+pada saat pengguna melakukan import excel menggunakan komponen `InputFileXlsx`, komponen ini akan mengekstrak data dari kolom yang didefinisikan di `extractFromColumns` dan mengembalikan `ParseExcelResult` pada handler `onChange`
+
+```ts
+// src\app\(route)\data-referensi\_components\excel-container.tsx
+import InputFileXlsx from "@/components/form/input-file-xlsx";
+
+const ExcelContainer = ({
+  name,
+  value,
+  templateXlsx,
+  extractFromColumns = [],
+  columnsWithEmptyValueAllowed = [],
+  onChange: parentOnChange = () => {},
+  onParse = () => {},
+  placeholder,
+}: ExcelContainerProps) => {
+    const handleOnChange = (parseExcelResult: ParseExcelResult) => {
+// handle data
+    }
+
+  // kode lainnya
+          <InputFileXlsx
+            onChange={handleOnChange}
+            maxColumns={9}
+            name={name}
+            extractFromColumns={extractFromColumns}
+            placeholder={placeholder}
+          />
+}
+```
+
+fungsi `handleOnChange` ini kemudian memproses `parseExcelResult` untuk dilakukan pengecekan apakah ada `missingColumns` atau `emptyValues`
+hasil akhir dari fungsi `handleOnChange` kemudian diteruskan lagi ke induk komponen `onParse(finalResult);`
+
+```ts
+// src\app\(route)\data-referensi\_components\excel-container.tsx
+const handleOnChange = (parseExcelResult: ParseExcelResult) => {
+    console.log("parseExcelResult", parseExcelResult);
+    if (
+      parseExcelResult.rows.length > 0 ||
+      parseExcelResult.missingColumns.length > 0
+    ) {
+      setData(parseExcelResult.rows);
+
+      // check if there is no missing columns and empty values
+      const result = splitEmptyValues(
+        parseExcelResult.emptyValues,
+        columnsWithEmptyValueAllowed
+      );
+      const { shouldNotEmpty, allowEmpty } = result;
+      setshouldNotEmpty(shouldNotEmpty);
+      setAllowEmpty(allowEmpty);
+      setEmptyValues(parseExcelResult.emptyValues);
+      setMissingColumns(parseExcelResult.missingColumns);
+      console.log(
+        "parseExcelResult.missingColumns",
+        parseExcelResult.missingColumns
+      );
+
+      // if there is no shouldNotEmpty, pass the data to parent component
+      if (Object.keys(shouldNotEmpty).length === 0) {
+        // console.log("Data is not empty");
+      }
+      const finalResult: ParseResult = extend(parseExcelResult, {
+        shouldNotEmpty,
+        allowEmpty,
+      });
+      onParse(finalResult);
+    } else {
+      console.log("[parseExcelResult] is empty");
+      // Clear data when value is empty
+      onParse(null);
+      parentOnChange && parentOnChange(null);
+      setData([]);
+      setEmptyValues({});
+      setMissingColumns([]);
+      console.log(value);
+    }
+  };
+```
+
+jika terdapat `missingColumns` ataupun `emptyValues` akan ditampilkan komponen `WarningOnEmpty`. hasil dari parse excel ditampilkan melalui komponen `TabelDariExcel`
+
+```ts
+// src\app\(route)\data-referensi\_components\excel-container.tsx
+import TabelDariExcel from "@/components/tabel-dari-excel";
+      {data.length > 0 && <TabelDariExcel data={data} />}
+```
+
+untuk keperluan edit data referensi juga terdapat 2 kelompok yaitu:
+
+1. inline edit
+    - menggunakan `TabelGeneric` `src\components\tabel-generic.tsx`
+2. isian form
+    - menggunakan `Dialog` `@/components/ui/dialog`
+    - menggunakan `TabelGenericWithoutInlineEdit` untuk display data
