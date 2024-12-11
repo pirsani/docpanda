@@ -138,7 +138,7 @@
     Gambar 2.7. Isian itinerary pada Formulir Setup Kegiatan Luar Negeri
 
     ![setup-kegiatan-luar-negeri-c](images/2/2-003-1-3-c-setup-kegiatan-luar-kota.png)
-    Gambar 2.8. Formulir Setup Kegiatan Luar Negeri dengan Itinerary yang telah diisi 
+    Gambar 2.8. Formulir Setup Kegiatan Luar Negeri dengan Itinerary yang telah diisi
     </center>
 
 ### **2.3.2 Pengajuan**
@@ -171,7 +171,7 @@ Pada form ini terdapat list kegiatan yang telah di daftarkan sebelumnya pada for
   <center> Gambar 2.10. Setup Pengajuan Dalam Kota </center>
 
 - Langkah 1:
-  1. Klik tombol `Ajukan Generate Rampungan`, maka akan ditampilkan form baru dibawahnya, 
+  1. Klik tombol `Ajukan Generate Rampungan`, maka akan ditampilkan form baru dibawahnya,
   2. klik `checklist` keterangan "Dengan ini saya menyatakan telah memeriksa data yang saya inputkan dan menyatakan bahwa data tersebut benar",
   3. Klik `Submit` akan muncul "keterangan Pengajuan Generate Rampungan berhasil diajukan, petugas akan memverifikasi pengajuan Anda".
 
@@ -200,7 +200,7 @@ Pada form ini terdapat list kegiatan yang telah di daftarkan sebelumnya pada for
     7. Surat/Nodin/Memo Undangan Narsum
     8. Klik `Simpan`
 
-  <center> 
+  <center>
 
   ![setup-pengajuan-kegiatan-dalam-kota-d](images/2/2-004-1-2-3-b-Jadwal-Kelas-Pengajar.png)
   Gambar 2.13. Jadwal Kelas Pengajar </center>
@@ -276,6 +276,7 @@ Pada form ini terdapat list kegiatan yang telah di daftarkan sebelumnya pada for
 Pada tahap ini terdapat 2 kegiatan yaitu `Verifikasi Generate Rampungan` dan `Verifikasi Honorarium`.
 
 #### **2.3.3.1 Verifikasi Generate Rampungan**
+
 - Langkah:
     1. Pilih `Kegiatan`, makan akan ditampilkan data-data: Nama Kegiatan, Tanggal Mulai, Tanggal Selesai, Dokumen Nodin/Memo/SK, Dokumen Jadwal Kegiatan, Dokumen Surat Tugas (multiple files), Lokasi, Status Rampungan
     2. Klik tombol `Verifikasi Generate Rampungan`
@@ -304,6 +305,7 @@ Pada tahap ini terdapat 2 kegiatan yaitu `Verifikasi Generate Rampungan` dan `Ve
 </center>
 
 ### **2.3.4 Daftar Nominatif**
+
 - Langkah:
   Pilih `Kegiatan` dan `Jenis Pengajuan`
 
@@ -335,7 +337,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 
     1. Pilih `Bendahara`, `PPK` kemudian klik tombol `Generate`, maka akan dihasilkan file PDF Nominatif Uang Harian.
     2. Masukan `catatan` apabila ada.
-    4. Klik tombol `Ajukan Pembayaran` apabila sudah sesuai.
+    3. Klik tombol `Ajukan Pembayaran` apabila sudah sesuai.
 
 <center>
 
@@ -347,9 +349,10 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 </center>
 
 ### **2.3.5 Pembayaran**
+
 - Langkah:
     1. Pilih `Kegiatan` kemudian klik `detail`
-    2. Akan ditampilkan detail kegiatan, klik `Narasumber`, 
+    2. Akan ditampilkan detail kegiatan, klik `Narasumber`,
     3. Isikan `Upload bukti pembayaran` lalu klik `Simpan`.
 
 <center>
@@ -387,6 +390,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 </center>
 
 ### **2.4.2 Materi**
+
 - Tabel ini berisi list atau daftar dari Materi yang telah terdaftar.
     1. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
     2. Klik lambang `Trash` untuk delete data.
@@ -406,6 +410,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 </center>
 
 ### **2.4.3 Kelas**
+
 - Tabel ini berisi list atau daftar dari Kelas yang telah terdaftar.
     1. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
     2. Klik lambang `Trash` untuk delete data.
@@ -426,6 +431,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 </center>
 
 ### **2.4.4 SBM Honorarium**
+
 - Tabel ini berisi list atau daftar dari SBM Honorarium yang telah terdaftar.
     1. Pilih `Tahun`
     2. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
@@ -528,7 +534,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
     3. Isikan `Satuan`
     4. Klik tombol `Tambah`
 
- - Apabila ingin menambahkan `SBM Transpor Jakarta Ke Kota/Kab Sekitar`, yaitu dengan cara:
+- Apabila ingin menambahkan `SBM Transpor Jakarta Ke Kota/Kab Sekitar`, yaitu dengan cara:
     1. klik tombol `SBM Transpor Jakarta Ke Kota/Kab Sekitar`
     2. Pilih `Nama Kota/Kab`
     3. Pilih `Tahun`
@@ -549,6 +555,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
 </center>
 
 ### **2.4.9 Unit Kerja**
+
 - Tabel ini berisi list atau daftar dari `Unit Kerja` yang telah terdaftar.
     1. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
     2. Klik lambang `Trash` untuk delete data.
@@ -614,6 +621,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
  </center>
 
 ### **2.4.12 Pagu**
+
 - Tabel ini berisi list atau daftar dari Pagu yang telah didaftarkan.
     1. Pilih `Tahun`
     2. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
@@ -636,6 +644,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
  </center>
 
 ### **2.4.13 SP2D**
+
 - Tabel ini berisi list atau daftar dari SP2D yang telah di tambahkan.
 
     1. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
@@ -646,7 +655,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
     2. Pilih `Unit Kerja`
     3. Isikan `Jumlah Dibayar`, `Nomor`
     4. Isikan `Tanggal Sp2d  
-    3. Klik tombol `Simpan`
+    5. Klik tombol `Simpan`
 
 <center>
 
@@ -703,6 +712,7 @@ Apabila memilih Honorarium maka akan muncul formulir dibawahya:
  </center>
 
 ### **2.4.16 Role**
+
 - Tabel ini berisi list atau daftar dari Role yang telah didaftarkan.
 
     1. Klik lambang `Pensil` apabila ingin melakukan `edit` data.
