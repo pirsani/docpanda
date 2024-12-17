@@ -1,5 +1,5 @@
-site_name: Panda Docs
-site_description: Documentation for Panda
+site_name: STRASA Docs
+site_description: Documentation for STRASA
 site_author: Pirsani Labs
 nav:
   - Home: index.md
@@ -7,7 +7,7 @@ nav:
   - Panduan Pengguna: panduan-pengguna.md
   - Panduan Pengembang: panduan-pengembang.md
   - Database: database.md
-  - Arsitektur dan Implementasi Nextjs: arsitektur-implementasi.md
+  - Arsitektur dan Implementasi Aplikasi menggunakan Nextjs: arsitektur-implementasi.md
   - Panduan Pemeliharaan: panduan-pemeliharaan.md
 # theme: readthedocs
 theme:

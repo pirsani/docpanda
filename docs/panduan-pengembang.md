@@ -98,7 +98,7 @@ services:
       - ./data:/data
 ```
 
-## **3.3 Instalasi Panda**
+## **3.3 Instalasi STRASA**
 
 ### **3.3.1 Instalasi**
 

@@ -1,4 +1,4 @@
-# **5. Arsitektur dan Implementasi Aplikasi Next.js**
+# **5. Arsitektur dan Implementasi Aplikasi menggunakan Nextjs**
 
 ## **5.1 Teknologi yang Digunakan**  
 

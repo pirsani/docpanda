@@ -2,7 +2,7 @@
 
 ## **1.1 Ringkasan**
 
-- Panda adalah Aplikasi Pengelolaan Administrasi Perbendaharaan yang bertujuan untuk menyederhanakan beragamnya tool pencatatan dari sebelumnya Excel, Word, Google Sheet, Google Form dan Google Drive menjadi satu aplikasi. Aplikasi  digagas oleh Pusdiklat, dan didukung oleh Pusat TIK KP Kementerian Luar.
+- STRASA adalah Aplikasi Pengelolaan Administrasi Perbendaharaan yang bertujuan untuk menyederhanakan beragamnya tool pencatatan dari sebelumnya Excel, Word, Google Sheet, Google Form dan Google Drive menjadi satu aplikasi. Aplikasi  digagas oleh Pusdiklat, dan didukung oleh Pusat TIK KP Kementerian Luar.
 - Dokumentasi ini ditujukan untuk pengguna aplikasi, administrator dan juga pengembang yang akan melakukan pemeliharaan.
   
 ## **1.2 Features**
@@ -22,6 +22,7 @@
 - Surat Perjalanan Dinas dan Lampirannya
 - Daftar Nominatif Uang Harian
 - Daftar Nominatif Honorarium
+- Laporan Excel pembayaran
 
 ## **1.3 Tech Stack**
 
@@ -32,5 +33,6 @@
   - **Utilities**: React Hook Form, Zod, Zustand
   - **PDF Handling**: PDFLib, PDFKit
   - **Charting**: Recharts
+  - **Excel Handling**: SheetJS CE
   - **Authentication**: Auth.js
   
