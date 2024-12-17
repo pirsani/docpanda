@@ -24,7 +24,7 @@
 - Daftar Nominatif Honorarium
 - Laporan Excel pembayaran
 
-## **1.3 Tech Stack**
+## **1.4 Tech Stack**
 
 - List of technologies used:
   
